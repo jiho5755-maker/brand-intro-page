@@ -220,14 +220,14 @@
             <div class="container">
                 <h2 class="section-title">주요 성과</h2>
 
-                <div class="achievement-tabs">
-                    <button class="tab-btn active" data-tab="awards">수상</button>
-                    <button class="tab-btn" data-tab="projects">주요 협업</button>
-                    <button class="tab-btn" data-tab="patents">특허</button>
+                <div class="achievement-tabs" role="tablist" aria-label="주요 성과 카테고리">
+                    <button class="tab-btn active" data-tab="awards" role="tab" aria-selected="true" aria-controls="awards-panel" id="awards-tab">수상</button>
+                    <button class="tab-btn" data-tab="projects" role="tab" aria-selected="false" aria-controls="projects-panel" id="projects-tab">주요 협업</button>
+                    <button class="tab-btn" data-tab="patents" role="tab" aria-selected="false" aria-controls="patents-panel" id="patents-tab">특허</button>
                 </div>
 
                 <!-- Awards Tab -->
-                <div class="tab-content active" data-tab-id="awards">
+                <div class="tab-content active" data-tab-id="awards" role="tabpanel" id="awards-panel" aria-labelledby="awards-tab">
                     <div class="achievement-grid">
                         <div class="achievement-card">
                             <span class="achievement-year">2025</span>
@@ -263,7 +263,7 @@
                 </div>
 
                 <!-- Projects Tab -->
-                <div class="tab-content" data-tab-id="projects">
+                <div class="tab-content" data-tab-id="projects" role="tabpanel" id="projects-panel" aria-labelledby="projects-tab">
                     <div class="achievement-grid">
                         <div class="achievement-card">
                             <span class="achievement-year">2018~</span>
@@ -299,7 +299,7 @@
                 </div>
 
                 <!-- Patents Tab -->
-                <div class="tab-content" data-tab-id="patents">
+                <div class="tab-content" data-tab-id="patents" role="tabpanel" id="patents-panel" aria-labelledby="patents-tab">
                     <div class="achievement-grid">
                         <div class="achievement-card">
                             <span class="achievement-year">2002</span>
@@ -499,34 +499,34 @@
                         사이즈: 각 800px 이상 (가로/세로 비율 자유)
                     -->
                     <div class="gallery-item">
-                        <img src="./images/gallery/gallery-1.jpg" alt="압화 작품 1">
+                        <img src="./images/gallery/gallery-1.jpg" alt="다양한 색상의 꽃잎과 나뭇잎을 이용한 압화 작품. 섬세한 색감과 배치가 돋보이는 프레임 작품">
                     </div>
                     <div class="gallery-item">
-                        <img src="./images/gallery/gallery-2.jpg" alt="압화 작품 2">
+                        <img src="./images/gallery/gallery-2.jpg" alt="붉은 장미와 흰 자스민이 조화를 이룬 압화 액자. 이진선 대표의 대표작 중 하나">
                     </div>
                     <div class="gallery-item">
-                        <img src="./images/gallery/gallery-3.jpg" alt="압화 작품 3">
+                        <img src="./images/gallery/gallery-3.jpg" alt="나비와 들꽃을 주제로 한 압화 작품. 자연의 아름다움을 그대로 담은 예술작품">
                     </div>
                     <div class="gallery-item">
-                        <img src="./images/gallery/gallery-4.jpg" alt="압화 작품 4">
+                        <img src="./images/gallery/gallery-4.jpg" alt="계절의 변화를 표현한 4계절 압화 시리즈. 봄, 여름, 가을, 겨울의 식물 특성을 압화 기법으로 표현">
                     </div>
                     <div class="gallery-item">
-                        <img src="./images/gallery/gallery-5.jpg" alt="투명 식물 표본 1">
+                        <img src="./images/gallery/gallery-5.jpg" alt="투명 식물 표본 기술로 제작된 난초 작품. 식물의 세포 구조까지 투명하게 보이는 혁신적 기법">
                     </div>
                     <div class="gallery-item">
-                        <img src="./images/gallery/gallery-6.jpg" alt="투명 식물 표본 2">
+                        <img src="./images/gallery/gallery-6.jpg" alt="투명 식물 표본으로 제작한 단풍잎 시리즈. 잎맥의 섬세한 구조가 크리스탈처럼 투명하게 표현됨">
                     </div>
                     <div class="gallery-item">
-                        <img src="./images/gallery/gallery-7.jpg" alt="전시 현장 1">
+                        <img src="./images/gallery/gallery-7.jpg" alt="서울대공원 투명 식물 표본 전시관 전경. 방문객들이 작품을 감상하는 모습">
                     </div>
                     <div class="gallery-item">
-                        <img src="./images/gallery/gallery-8.jpg" alt="전시 현장 2">
+                        <img src="./images/gallery/gallery-8.jpg" alt="국립생물자원관 특별 전시 현장. 대형 압화 작품들이 벽면을 가득 채운 전시 공간">
                     </div>
                     <div class="gallery-item">
-                        <img src="./images/gallery/gallery-9.jpg" alt="교육 현장 1">
+                        <img src="./images/gallery/gallery-9.jpg" alt="장애인 압화 교육 현장. 이진선 대표가 수강생들에게 압화 기법을 지도하는 모습">
                     </div>
                     <div class="gallery-item">
-                        <img src="./images/gallery/gallery-10.jpg" alt="교육 현장 2">
+                        <img src="./images/gallery/gallery-10.jpg" alt="문화센터 압화 수업 현장. 다양한 연령대의 수강생들이 각자의 작품을 만들고 있는 모습">
                     </div>
                 </div>
             </div>
@@ -555,10 +555,10 @@
         <!-- 자사몰 푸터 코드 -->
     </footer>
 
-    <div id="lightbox" class="lightbox">
+    <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="이미지 확대 보기">
         <div class="lightbox-content">
-            <span class="lightbox-close">&times;</span>
-            <img src="" alt="">
+            <button class="lightbox-close" aria-label="닫기">&times;</button>
+            <img src="" alt="" id="lightbox-image">
         </div>
     </div>
 
@@ -572,10 +572,10 @@
 
     <!-- Scripts -->
     <!-- jQuery (Slick 의존성) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script defer src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Slick Carousel JS (jsDelivr CDN) -->
-    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-    <script src="./js/common.js"></script>
-    <script src="./js/heritage.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script defer src="./js/common.js"></script>
+    <script defer src="./js/heritage.js"></script>
 </body>
 </html>

@@ -25,10 +25,14 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', function() {
             const tabId = this.getAttribute('data-tab');
 
-            // Remove active class from all buttons
-            tabBtns.forEach(b => b.classList.remove('active'));
-            // Add active to clicked button
+            // Remove active class from all buttons and update ARIA
+            tabBtns.forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-selected', 'false');
+            });
+            // Add active to clicked button and update ARIA
             this.classList.add('active');
+            this.setAttribute('aria-selected', 'true');
 
             // Hide all tab contents
             tabContents.forEach(content => content.classList.remove('active'));
@@ -88,83 +92,129 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ==========================================
-    // 4. Book Carousel (Swiper)
+    // 4. Book Carousel (Slick) - 메이크샵 최적화
     // ==========================================
-    if (typeof Swiper !== 'undefined') {
-        const bookSwiper = new Swiper('.book-carousel', {
-            slidesPerView: 1.2,
-            spaceBetween: 20,
-            loop: true,
-            centeredSlides: true,
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            breakpoints: {
-                640: {
-                    slidesPerView: 2,
-                    spaceBetween: 20,
-                    centeredSlides: false,
+    if (typeof jQuery !== 'undefined' && typeof jQuery.fn.slick !== 'undefined') {
+        jQuery('.book-carousel').slick({
+            slidesToShow: 4,
+            slidesToScroll: 1,
+            infinite: true,
+            dots: true,
+            arrows: true,
+            autoplay: false,
+            responsive: [
+                {
+                    breakpoint: 1200,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 1
+                    }
                 },
-                768: {
-                    slidesPerView: 2.5,
-                    spaceBetween: 30,
-                    centeredSlides: false,
+                {
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 2.5,
+                        slidesToScroll: 1
+                    }
                 },
-                1024: {
-                    slidesPerView: 3,
-                    spaceBetween: 30,
-                    centeredSlides: false,
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 1
+                    }
                 },
-                1200: {
-                    slidesPerView: 4,
-                    spaceBetween: 40,
-                    centeredSlides: false,
-                },
-            },
+                {
+                    breakpoint: 640,
+                    settings: {
+                        slidesToShow: 1.2,
+                        slidesToScroll: 1,
+                        centerMode: true
+                    }
+                }
+            ]
         });
     }
 
     // ==========================================
-    // 5. Gallery Lightbox
+    // 5. Gallery Lightbox (Enhanced)
     // ==========================================
     const galleryItems = document.querySelectorAll('.gallery-item');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = lightbox.querySelector('img');
     const lightboxClose = lightbox.querySelector('.lightbox-close');
+    let currentImageIndex = 0;
+    let previousFocus = null;
 
-    galleryItems.forEach(item => {
+    // Open lightbox
+    galleryItems.forEach((item, index) => {
         item.addEventListener('click', function(e) {
             const imgSrc = this.querySelector('img').src;
             const imgAlt = this.querySelector('img').alt;
             lightboxImg.src = imgSrc;
             lightboxImg.alt = imgAlt;
-            lightbox.style.display = 'flex';
+            currentImageIndex = index;
+            lightbox.classList.add('active');
             document.body.style.overflow = 'hidden';
+
+            // Store previous focus for restoration
+            previousFocus = document.activeElement;
+            // Focus on close button for accessibility
+            lightboxClose.focus();
         });
     });
 
-    lightboxClose.addEventListener('click', function() {
-        lightbox.style.display = 'none';
+    // Close lightbox function
+    function closeLightbox() {
+        lightbox.classList.remove('active');
         document.body.style.overflow = 'auto';
-    });
+        // Restore focus to previous element
+        if (previousFocus) {
+            previousFocus.focus();
+        }
+    }
+
+    // Navigate to next/previous image
+    function navigateImage(direction) {
+        currentImageIndex += direction;
+        if (currentImageIndex < 0) currentImageIndex = galleryItems.length - 1;
+        if (currentImageIndex >= galleryItems.length) currentImageIndex = 0;
+
+        const newImg = galleryItems[currentImageIndex].querySelector('img');
+        lightboxImg.src = newImg.src;
+        lightboxImg.alt = newImg.alt;
+    }
+
+    lightboxClose.addEventListener('click', closeLightbox);
 
     lightbox.addEventListener('click', function(e) {
         if (e.target === lightbox) {
-            lightbox.style.display = 'none';
-            document.body.style.overflow = 'auto';
+            closeLightbox();
         }
     });
 
-    // Close lightbox on Escape key
+    // Enhanced keyboard navigation
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && lightbox.style.display === 'flex') {
-            lightbox.style.display = 'none';
-            document.body.style.overflow = 'auto';
+        if (!lightbox.classList.contains('active')) return;
+
+        switch(e.key) {
+            case 'Escape':
+                closeLightbox();
+                break;
+            case 'ArrowRight':
+                navigateImage(1);
+                break;
+            case 'ArrowLeft':
+                navigateImage(-1);
+                break;
+        }
+    });
+
+    // Focus trap inside lightbox
+    lightbox.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab' && lightbox.classList.contains('active')) {
+            e.preventDefault();
+            lightboxClose.focus();
         }
     });
 
