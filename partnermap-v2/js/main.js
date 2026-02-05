@@ -119,9 +119,17 @@ async function loadPartnerData() {
         const response = await fetch(GOOGLE_SHEET_API_URL);
         const data = await response.json();
 
-        // 데이터 가공
-        const partners = data
-            .filter(p => p.status === 'active' && p.lat && p.lng)
+        // API 응답 구조 확인 (원본과 동일하게 data.partners 사용)
+        const rawPartners = data.partners || data;
+
+        if (!Array.isArray(rawPartners)) {
+            console.error('잘못된 데이터 형식:', data);
+            return [];
+        }
+
+        // 데이터 가공 (status 필터 제거 - 원본에 없음)
+        const partners = rawPartners
+            .filter(p => p.lat && p.lng)
             .map(p => ({
                 id: p.id,
                 name: p.name,
