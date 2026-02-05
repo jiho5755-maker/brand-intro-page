@@ -889,3 +889,264 @@ p {
         max-width: none;
     }
 }
+
+/* ==========================================
+   즐겨찾기 버튼
+   ========================================== */
+
+.partner-card {
+    position: relative;
+}
+
+.partner-card .favorite-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--bg-white);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.125rem;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-fast);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.partner-card .favorite-btn:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-md);
+}
+
+.partner-card .favorite-btn.active {
+    background: #FFF0F0;
+}
+
+.favorites-filter-btn {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--bg-white);
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-md);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.favorites-filter-btn:hover {
+    border-color: var(--brand-primary);
+    background: var(--bg-cream);
+}
+
+.favorites-filter-btn.active {
+    background: #FFF0F0;
+    border-color: #E57373;
+    color: #C62828;
+}
+
+/* ==========================================
+   모달 액션 버튼
+   ========================================== */
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    margin: 16px 0 24px;
+    padding: 0 4px;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-md);
+    background: var(--bg-white);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.action-btn:hover {
+    border-color: var(--brand-primary);
+    background: var(--bg-cream);
+}
+
+.action-btn.favorite-btn.active {
+    background: #FFF0F0;
+    border-color: #E57373;
+    color: #C62828;
+}
+
+.action-btn.share-btn:hover {
+    border-color: #1976D2;
+    background: #E3F2FD;
+}
+
+/* ==========================================
+   길찾기 버튼
+   ========================================== */
+
+.navigation-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.nav-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: center;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.nav-btn.naver {
+    background: #03C75A;
+    color: white;
+}
+
+.nav-btn.naver:hover {
+    background: #02B350;
+}
+
+.nav-btn.kakao {
+    background: #FEE500;
+    color: #191919;
+}
+
+.nav-btn.kakao:hover {
+    background: #FAE100;
+}
+
+/* ==========================================
+   공유 모달
+   ========================================== */
+
+.share-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition-base);
+}
+
+.share-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.share-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.share-modal-content {
+    position: relative;
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    width: 90%;
+    max-width: 340px;
+    text-align: center;
+    transform: translateY(20px);
+    transition: var(--transition-base);
+}
+
+.share-modal.active .share-modal-content {
+    transform: translateY(0);
+}
+
+.share-modal-content h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.share-modal-content p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+.share-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.share-option {
+    padding: 14px 20px;
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-md);
+    background: var(--bg-white);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.share-option:hover {
+    border-color: var(--brand-primary);
+    background: var(--bg-cream);
+}
+
+.share-close {
+    padding: 10px 24px;
+    background: var(--bg-cream);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.share-close:hover {
+    background: var(--border-light);
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .modal-actions {
+        flex-direction: column;
+    }
+
+    .navigation-buttons {
+        flex-direction: column;
+    }
+}

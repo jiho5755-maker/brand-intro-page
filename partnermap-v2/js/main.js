@@ -26,6 +26,65 @@ let currentFilters = {
     partnerType: 'all',
     search: ''
 };
+let favorites = [];
+let showFavoritesOnly = false;
+
+// 즐겨찾기 관리
+function loadFavorites() {
+    try {
+        const saved = localStorage.getItem('fresco21_favorites');
+        favorites = saved ? JSON.parse(saved) : [];
+    } catch (e) {
+        favorites = [];
+    }
+}
+
+function saveFavorites() {
+    localStorage.setItem('fresco21_favorites', JSON.stringify(favorites));
+}
+
+function isFavorite(partnerId) {
+    return favorites.includes(String(partnerId));
+}
+
+function toggleFavorite(partnerId, event) {
+    if (event) {
+        event.stopPropagation();
+    }
+    const id = String(partnerId);
+    if (isFavorite(id)) {
+        favorites = favorites.filter(f => f !== id);
+        showToast('즐겨찾기에서 제거했습니다.', 'info');
+    } else {
+        favorites.push(id);
+        showToast('즐겨찾기에 추가했습니다!', 'success');
+    }
+    saveFavorites();
+    renderPartnerList();
+    updateFavoriteButtons();
+}
+
+function updateFavoriteButtons() {
+    document.querySelectorAll('.favorite-btn').forEach(btn => {
+        const id = btn.dataset.id;
+        if (isFavorite(id)) {
+            btn.classList.add('active');
+            btn.innerHTML = '❤️';
+        } else {
+            btn.classList.remove('active');
+            btn.innerHTML = '🤍';
+        }
+    });
+}
+
+function toggleFavoritesFilter() {
+    showFavoritesOnly = !showFavoritesOnly;
+    const btn = document.getElementById('favoritesFilterBtn');
+    if (btn) {
+        btn.classList.toggle('active', showFavoritesOnly);
+    }
+    applyFilters();
+}
 
 /* ==========================================
    네이버 지도 SDK 로드
@@ -55,6 +114,9 @@ function loadNaverMapSDK() {
 
 async function initPartnerMap() {
     try {
+        // 0. 즐겨찾기 로드
+        loadFavorites();
+
         // 1. SDK 로드
         await loadNaverMapSDK();
 
@@ -389,11 +451,17 @@ function applyFilters() {
             }
         }
 
+        // 즐겨찾기 필터
+        if (showFavoritesOnly && !isFavorite(partner.id)) {
+            return false;
+        }
+
         return true;
     });
 
     createMarkers();
     renderPartnerList();
+    updateFavoriteButtons();
 }
 
 function extractRegion(address) {
@@ -442,8 +510,15 @@ function renderPartnerList() {
 }
 
 function createPartnerCardHTML(partner) {
+    const isFav = isFavorite(partner.id);
     return `
         <div class="partner-card" data-id="${partner.id}">
+            <button class="favorite-btn ${isFav ? 'active' : ''}"
+                    data-id="${partner.id}"
+                    onclick="toggleFavorite('${partner.id}', event)"
+                    title="즐겨찾기">
+                ${isFav ? '❤️' : '🤍'}
+            </button>
             <div class="partner-logo">
                 <img src="${partner.logoUrl || './images/default-logo.jpg'}"
                      alt="${escapeHtml(partner.name)}"
@@ -468,6 +543,7 @@ function createPartnerCardHTML(partner) {
 function showPartnerDetail(partner) {
     const modal = document.getElementById('partnerModal');
     const modalBody = document.getElementById('modalBody');
+    const isFav = isFavorite(partner.id);
 
     modalBody.innerHTML = `
         <div class="modal-header">
@@ -482,6 +558,18 @@ function showPartnerDetail(partner) {
             ` : ''}
         </div>
 
+        <!-- 액션 버튼 -->
+        <div class="modal-actions">
+            <button class="action-btn favorite-btn ${isFav ? 'active' : ''}"
+                    onclick="toggleFavorite('${partner.id}')"
+                    data-id="${partner.id}">
+                ${isFav ? '❤️ 즐겨찾기됨' : '🤍 즐겨찾기'}
+            </button>
+            <button class="action-btn share-btn" onclick="sharePartner('${partner.id}')">
+                📤 공유하기
+            </button>
+        </div>
+
         ${partner.imageUrl ? `<img src="${partner.imageUrl}" class="modal-image" alt="${escapeHtml(partner.name)}">` : ''}
 
         <div class="modal-section">
@@ -492,17 +580,24 @@ function showPartnerDetail(partner) {
         <div class="modal-section">
             <h3>위치 정보</h3>
             <p class="address">📍 ${escapeHtml(partner.address)}</p>
-            <a href="https://map.naver.com/v5/directions/-/-/-/car?c=${partner.lng},${partner.lat},15"
-               target="_blank"
-               class="map-link-btn">
-                네이버 지도로 길찾기
-            </a>
+            <div class="navigation-buttons">
+                <a href="https://map.naver.com/v5/search/${encodeURIComponent(partner.address)}"
+                   target="_blank"
+                   class="nav-btn naver">
+                    🗺️ 네이버 지도
+                </a>
+                <a href="https://map.kakao.com/?q=${encodeURIComponent(partner.address)}"
+                   target="_blank"
+                   class="nav-btn kakao">
+                    🗺️ 카카오맵
+                </a>
+            </div>
         </div>
 
         <div class="modal-section">
             <h3>연락처</h3>
-            <p>📞 ${escapeHtml(partner.phone)}</p>
-            ${partner.email ? `<p>📧 ${escapeHtml(partner.email)}</p>` : ''}
+            <p>📞 <a href="tel:${partner.phone}">${escapeHtml(partner.phone)}</a></p>
+            ${partner.email ? `<p>📧 <a href="mailto:${partner.email}">${escapeHtml(partner.email)}</a></p>` : ''}
         </div>
     `;
 
@@ -514,6 +609,115 @@ function closeModal() {
     const modal = document.getElementById('partnerModal');
     modal.classList.remove('active');
     document.body.style.overflow = 'auto';
+}
+
+/* ==========================================
+   공유 기능
+   ========================================== */
+
+function sharePartner(partnerId) {
+    const partner = partners.find(p => String(p.id) === String(partnerId));
+    if (!partner) return;
+
+    const shareUrl = `${window.location.origin}${window.location.pathname}?partner=${encodeURIComponent(partner.name)}`;
+    const shareText = `${partner.name} - 프레스코21 제휴 공방\n📍 ${partner.address}`;
+
+    // 공유 옵션 모달 표시
+    showShareOptions(partner, shareUrl, shareText);
+}
+
+function showShareOptions(partner, shareUrl, shareText) {
+    const existingModal = document.getElementById('shareModal');
+    if (existingModal) existingModal.remove();
+
+    const shareModal = document.createElement('div');
+    shareModal.id = 'shareModal';
+    shareModal.className = 'share-modal';
+    shareModal.innerHTML = `
+        <div class="share-modal-overlay" onclick="closeShareModal()"></div>
+        <div class="share-modal-content">
+            <h3>공유하기</h3>
+            <p>${escapeHtml(partner.name)}</p>
+            <div class="share-buttons">
+                <button class="share-option" onclick="copyShareLink('${shareUrl}')">
+                    📋 링크 복사
+                </button>
+                <button class="share-option" onclick="shareKakao('${escapeHtml(partner.name)}', '${escapeHtml(partner.address)}', '${shareUrl}')">
+                    💬 카카오톡
+                </button>
+                ${navigator.share ? `
+                <button class="share-option" onclick="nativeShare('${escapeHtml(shareText)}', '${shareUrl}')">
+                    📤 더보기
+                </button>
+                ` : ''}
+            </div>
+            <button class="share-close" onclick="closeShareModal()">닫기</button>
+        </div>
+    `;
+    document.body.appendChild(shareModal);
+    setTimeout(() => shareModal.classList.add('active'), 10);
+}
+
+function closeShareModal() {
+    const modal = document.getElementById('shareModal');
+    if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => modal.remove(), 300);
+    }
+}
+
+function copyShareLink(url) {
+    navigator.clipboard.writeText(url).then(() => {
+        showToast('링크가 복사되었습니다!', 'success');
+        closeShareModal();
+    }).catch(() => {
+        // Fallback for older browsers
+        const input = document.createElement('input');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        showToast('링크가 복사되었습니다!', 'success');
+        closeShareModal();
+    });
+}
+
+function shareKakao(name, address, url) {
+    // 카카오 SDK가 로드되어 있는지 확인
+    if (typeof Kakao !== 'undefined' && Kakao.isInitialized()) {
+        Kakao.Share.sendDefault({
+            objectType: 'location',
+            address: address,
+            addressTitle: name,
+            content: {
+                title: name,
+                description: `프레스코21 제휴 공방\n${address}`,
+                imageUrl: 'https://jiho5755-maker.github.io/brand-intro-page/partnermap-v2/images/default-logo.jpg',
+                link: { mobileWebUrl: url, webUrl: url }
+            },
+            buttons: [{
+                title: '공방 보기',
+                link: { mobileWebUrl: url, webUrl: url }
+            }]
+        });
+    } else {
+        // 카카오 SDK가 없으면 카카오톡 공유 URL 사용
+        const kakaoShareUrl = `https://story.kakao.com/share?url=${encodeURIComponent(url)}`;
+        window.open(kakaoShareUrl, '_blank', 'width=600,height=400');
+    }
+    closeShareModal();
+}
+
+function nativeShare(text, url) {
+    if (navigator.share) {
+        navigator.share({
+            title: '프레스코21 제휴 공방',
+            text: text,
+            url: url
+        }).catch(() => {});
+    }
+    closeShareModal();
 }
 
 /* ==========================================

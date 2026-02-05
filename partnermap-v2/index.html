@@ -12,8 +12,8 @@
     <!-- Pretendard 폰트 (메이크샵 CDN) -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 
-    <!-- 파트너맵 전용 CSS (Self-Contained) -->
-    <link rel="stylesheet" href="./css/style.css">
+    <!-- 파트너맵 전용 CSS (v4 - 즐겨찾기, 공유 스타일 추가) -->
+    <link rel="stylesheet" href="./css/style.css?v=4">
 
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#7D9675">
@@ -105,15 +105,20 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-12 col-md-8 mb-3">
+                        <div class="col-12 col-md-6 mb-3">
                             <input type="text"
                                    id="partnerSearch"
                                    placeholder="업체명, 주소로 검색..."
                                    class="search-input">
                         </div>
-                        <div class="col-12 col-md-4 mb-3">
+                        <div class="col-12 col-md-3 mb-3">
                             <button class="location-btn" id="myLocationBtn">
-                                📍 내 위치에서 찾기
+                                📍 내 위치
+                            </button>
+                        </div>
+                        <div class="col-12 col-md-3 mb-3">
+                            <button class="favorites-filter-btn" id="favoritesFilterBtn" onclick="toggleFavoritesFilter()">
+                                ❤️ 즐겨찾기만
                             </button>
                         </div>
                     </div>
@@ -174,8 +179,8 @@
     <!-- Toast Container -->
     <div id="toastContainer"></div>
 
-    <!-- 파트너맵 전용 JavaScript (v3 캐시 무효화) -->
-    <script src="./js/main.js?v=3"></script>
+    <!-- 파트너맵 전용 JavaScript (v4 - 즐겨찾기, 공유 추가) -->
+    <script src="./js/main.js?v=4"></script>
 
     <!-- Service Worker 등록 -->
     <script>
