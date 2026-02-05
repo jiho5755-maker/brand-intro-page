@@ -1509,3 +1509,151 @@ html {
         height: 24px;
     }
 }
+
+/* ==========================================
+   Section CTA Buttons (페르소나별 행동 유도)
+   ========================================== */
+
+.section-cta {
+    margin-top: 60px;
+    text-align: center;
+}
+
+.cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 40px;
+    border-radius: 16px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s;
+}
+
+.cta-btn:hover::before {
+    left: 100%;
+}
+
+.cta-btn:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.cta-icon {
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.cta-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: left;
+}
+
+.cta-text strong {
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.cta-text small {
+    font-size: 0.875rem;
+    opacity: 0.85;
+    line-height: 1.4;
+}
+
+.cta-arrow {
+    font-size: 1.5rem;
+    font-weight: 700;
+    transition: transform 0.3s ease;
+}
+
+.cta-btn:hover .cta-arrow {
+    transform: translateX(8px);
+}
+
+/* CTA 스타일 변형 */
+.cta-primary {
+    background: linear-gradient(135deg, #2d5f4f 0%, #425b51 100%);
+    color: white;
+}
+
+.cta-primary:hover {
+    background: linear-gradient(135deg, #1e4a3c 0%, #354a41 100%);
+}
+
+.cta-secondary {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: #2d5f4f;
+    border: 2px solid #2d5f4f;
+}
+
+.cta-secondary:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    border-color: #1e4a3c;
+}
+
+.cta-accent {
+    background: linear-gradient(135deg, #8b7355 0%, #6f5c44 100%);
+    color: white;
+}
+
+.cta-accent:hover {
+    background: linear-gradient(135deg, #6f5c44 0%, #5a4936 100%);
+}
+
+/* 모바일 반응형 */
+@media (max-width: 767px) {
+    .section-cta {
+        margin-top: 40px;
+    }
+
+    .cta-btn {
+        flex-direction: column;
+        padding: 20px 24px;
+        gap: 12px;
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .cta-text {
+        text-align: center;
+    }
+
+    .cta-text strong {
+        font-size: 1rem;
+    }
+
+    .cta-text small {
+        font-size: 0.8125rem;
+    }
+
+    .cta-arrow {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .cta-btn {
+        padding: 18px 20px;
+    }
+
+    .cta-icon {
+        font-size: 1.75rem;
+    }
+}

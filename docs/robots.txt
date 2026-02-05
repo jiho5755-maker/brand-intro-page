@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jiho5755-maker.github.io/brand-intro-page/sitemap.xml

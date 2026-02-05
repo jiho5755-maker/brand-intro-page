@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전국 제휴 공방 찾기 | 프레스코21</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="프레스코21 전국 제휴 공방을 지도에서 확인하세요. 압화, 플라워디자인, 투명식물표본 전문가를 만나보세요.">
+    <meta name="keywords" content="프레스코21, 제휴공방, 압화, 플라워디자인, 투명식물표본, 꽃공예">
+
+    <!-- Pretendard 폰트 (메이크샵 CDN) -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+    <!-- 파트너맵 전용 CSS (Self-Contained) -->
+    <link rel="stylesheet" href="./css/style.css">
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#7D9675">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="프레스코21 공방맵">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="./manifest.webmanifest">
+
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="./images/default-logo.jpg">
+
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://oapi.map.naver.com">
+    <link rel="preconnect" href="https://script.google.com">
+    <link rel="dns-prefetch" href="https://oapi.map.naver.com">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="전국 제휴 공방 찾기 | 프레스코21">
+    <meta property="og:description" content="압화, 플라워디자인, 투명식물표본 전문 공방을 지도에서 찾아보세요. GPS 기반 주변 검색 지원.">
+    <meta property="og:image" content="./images/default-logo.jpg">
+    <meta property="og:url" content="https://jiho5755-maker.github.io/brand-intro-page/">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="전국 제휴 공방 찾기 | 프레스코21">
+    <meta name="twitter:description" content="압화, 플라워디자인, 투명식물표본 전문 공방을 지도에서 찾아보세요.">
+    <meta name="twitter:image" content="./images/default-logo.jpg">
+</head>
+<body>
+    <!-- Header: 자사몰 공통 헤더 -->
+    <header id="header" class="main-header">
+        <div class="container">
+            <h2 style="margin: 0; color: var(--text-primary);">프레스코21</h2>
+        </div>
+    </header>
+
+    <main id="partnermap-main">
+        <!-- 히어로 섹션 -->
+        <section class="partnermap-hero">
+            <div class="container">
+                <h1>전국 제휴 공방 찾기</h1>
+                <p>프레스코21과 함께하는 꽃 공예 전문가를 만나보세요</p>
+            </div>
+        </section>
+
+        <!-- Partner Map Section -->
+        <section class="partnermap-section">
+            <div class="container">
+
+                <!-- 필터 컨트롤 -->
+                <div class="partnermap-controls">
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="filter-label">카테고리</label>
+                            <div class="filter-buttons" id="categoryFilters">
+                                <button class="filter-btn active" data-category="all">전체</button>
+                                <!-- 동적 생성 -->
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="filter-label">지역</label>
+                            <div class="filter-buttons" id="regionFilters">
+                                <button class="filter-btn active" data-region="all">전국</button>
+                                <!-- 동적 생성 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-md-8 mb-3">
+                            <input type="text"
+                                   id="partnerSearch"
+                                   placeholder="업체명, 주소로 검색..."
+                                   class="search-input">
+                        </div>
+                        <div class="col-12 col-md-4 mb-3">
+                            <button class="location-btn" id="myLocationBtn">
+                                📍 내 위치에서 찾기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 지도 + 리스트 레이아웃 -->
+                <div class="row map-row">
+                    <!-- 지도 영역 -->
+                    <div class="col-12 col-md-8 mb-3">
+                        <div class="map-container">
+                            <div id="naverMap"></div>
+                            <div class="map-loading" id="mapLoading">
+                                <div class="loading-spinner"></div>
+                                <p>지도를 불러오는 중...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 파트너 리스트 -->
+                    <div class="col-12 col-md-4">
+                        <div class="partner-sidebar">
+                            <div class="sidebar-header">
+                                <h3>검색 결과</h3>
+                                <span class="result-count" id="resultCount">0개</span>
+                            </div>
+                            <div class="partner-list" id="partnerList">
+                                <div class="skeleton-card"></div>
+                                <div class="skeleton-card"></div>
+                                <div class="skeleton-card"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 상세 정보 모달 -->
+        <div id="partnerModal" class="partner-modal">
+            <div class="modal-overlay" id="modalOverlay"></div>
+            <div class="modal-content">
+                <button class="modal-close" id="modalClose">&times;</button>
+                <div class="modal-body" id="modalBody">
+                    <!-- JavaScript로 동적 생성 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer: 자사몰 공통 푸터 -->
+    <footer class="main-footer">
+        <div class="container">
+            <p style="text-align: center; margin: 0; color: rgba(255,255,255,0.8); font-size: 0.875rem;">
+                © 2024 프레스코21. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <!-- 파트너맵 전용 JavaScript -->
+    <script src="./js/main.js"></script>
+
+    <!-- Service Worker 등록 -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(function(registration) {
+                        console.log('✅ ServiceWorker registered:', registration.scope);
+                    })
+                    .catch(function(error) {
+                        console.log('❌ ServiceWorker registration failed:', error);
+                    });
+            });
+        }
+
+        // PWA 설치 프롬프트
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            deferredPrompt = e;
+            console.log('💾 PWA 설치 가능');
+            // 필요시 설치 버튼 UI 표시
+        });
+
+        window.addEventListener('appinstalled', function() {
+            console.log('✅ PWA 설치 완료');
+            deferredPrompt = null;
+        });
+    </script>
+</body>
+</html>
