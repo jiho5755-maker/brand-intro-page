@@ -12,13 +12,16 @@ const CONFIG = {
     defaultCenter: { lat: 37.5665, lng: 126.9780 }, // 서울 시청
     defaultZoom: 11,
     cacheKey: 'fresco21_partners_v3',  // 캐시 키 변경 (이전 캐시 무효화)
-    cacheDuration: 24 * 60 * 60 * 1000 // 24시간
+    cacheDuration: 24 * 60 * 60 * 1000, // 24시간
+    clusterZoom: 10 // 줌 레벨이 이 값 이하일 때 클러스터링 활성화
 };
 
 let map = null;
 let markers = [];
+let clusterMarkers = []; // 클러스터 마커 목록
 let partners = [];
 let filteredPartners = [];
+let idleListenerRef = null; // 지도 idle 이벤트 리스너 참조
 let currentFilters = {
     category: 'all',
     region: 'all',
@@ -179,6 +182,9 @@ function initMap() {
         console.log('좌표:', clickedLat, clickedLng);  // 디버깅
         setReferencePoint(clickedLat, clickedLng);
     });
+
+    // 지도 이동/줌 완료 시 마커 가시성 및 클러스터링 업데이트
+    idleListenerRef = naver.maps.Event.addListener(map, 'idle', updateMarkerVisibility);
 }
 
 // 기준점 설정 및 거리순 정렬
@@ -401,16 +407,20 @@ function generateFilters() {
 
 function createMarkers() {
     // 기존 마커 제거
-    markers.forEach(marker => marker.setMap(null));
+    markers.forEach(item => item.marker.setMap(null));
     markers = [];
+
+    // 기존 클러스터 마커 제거
+    clusterMarkers.forEach(marker => marker.setMap(null));
+    clusterMarkers = [];
 
     filteredPartners.forEach(partner => {
         const position = new naver.maps.LatLng(partner.lat, partner.lng);
 
-        // 커스텀 마커 생성
+        // 커스텀 마커 생성 (초기에는 숨김 - 클러스터링/뷰포트 기반 관리)
         const marker = new naver.maps.Marker({
             position: position,
-            map: map,
+            map: null, // 초기에는 숨김
             title: partner.name,
             icon: {
                 content: createMarkerIcon(partner),
@@ -424,13 +434,17 @@ function createMarkers() {
             map.panTo(position);
         });
 
-        markers.push(marker);
+        // 마커와 파트너 정보를 함께 저장
+        markers.push({ marker, partner });
     });
 
     // 지도 범위 조정
     if (filteredPartners.length > 0) {
         adjustMapBounds();
     }
+
+    // 마커 가시성 업데이트 (클러스터링 적용)
+    setTimeout(() => updateMarkerVisibility(), 100);
 }
 
 function createMarkerIcon(partner) {
@@ -486,6 +500,166 @@ function adjustMapBounds() {
         bounds.extend(new naver.maps.LatLng(partner.lat, partner.lng));
     });
     map.fitBounds(bounds);
+}
+
+/* ==========================================
+   마커 클러스터링
+   ========================================== */
+
+/**
+ * Viewport 내 마커 표시 + 클러스터링 통합
+ * 줌 레벨에 따라 클러스터링 또는 개별 마커 표시
+ */
+function updateMarkerVisibility() {
+    if (!map) return;
+
+    const bounds = map.getBounds();
+    if (!bounds) return;
+
+    const zoom = map.getZoom();
+
+    // 기존 클러스터 마커 제거
+    clusterMarkers.forEach(marker => marker.setMap(null));
+    clusterMarkers = [];
+
+    if (zoom <= CONFIG.clusterZoom) {
+        // === 클러스터 모드 ===
+        const visibleItems = [];
+
+        markers.forEach(item => {
+            if (bounds.hasLatLng(item.marker.getPosition())) {
+                visibleItems.push(item);
+            }
+            // 개별 마커는 모두 숨김
+            item.marker.setMap(null);
+        });
+
+        // 클러스터 계산
+        const clusters = computeClusters(visibleItems, zoom);
+
+        clusters.forEach(cluster => {
+            if (cluster.length === 1) {
+                // 단일 마커는 그대로 표시
+                cluster[0].marker.setMap(map);
+            } else {
+                // 클러스터 마커 생성
+                createClusterMarker(cluster);
+            }
+        });
+    } else {
+        // === 일반 모드: Viewport 기반 가시성 ===
+        markers.forEach(item => {
+            const inBounds = bounds.hasLatLng(item.marker.getPosition());
+            if (inBounds && !item.marker.getMap()) {
+                item.marker.setMap(map);
+            } else if (!inBounds && item.marker.getMap()) {
+                item.marker.setMap(null);
+            }
+        });
+    }
+}
+
+/**
+ * 클러스터 그룹핑 (거리 기반 단일 링크)
+ * @param {Array} visibleItems - Viewport 내 마커 배열
+ * @param {number} zoom - 현재 줌 레벨
+ * @returns {Array} 클러스터 배열
+ */
+function computeClusters(visibleItems, zoom) {
+    // 줌 레벨에 따른 클러스터 반경 (km)
+    const thresholdKm = Math.pow(2, 12 - zoom) * 0.3;
+    const used = new Set();
+    const clusters = [];
+
+    for (let i = 0; i < visibleItems.length; i++) {
+        if (used.has(i)) continue;
+
+        const cluster = [visibleItems[i]];
+        used.add(i);
+
+        for (let j = i + 1; j < visibleItems.length; j++) {
+            if (used.has(j)) continue;
+
+            const dist = calculateDistance(
+                visibleItems[i].partner.lat,
+                visibleItems[i].partner.lng,
+                visibleItems[j].partner.lat,
+                visibleItems[j].partner.lng
+            );
+
+            if (dist <= thresholdKm) {
+                cluster.push(visibleItems[j]);
+                used.add(j);
+            }
+        }
+
+        clusters.push(cluster);
+    }
+
+    return clusters;
+}
+
+/**
+ * 클러스터 마커 생성
+ * @param {Array} cluster - 클러스터에 포함된 마커 배열
+ */
+function createClusterMarker(cluster) {
+    // 클러스터 중심점 계산
+    const totalLat = cluster.reduce((sum, item) => sum + item.partner.lat, 0);
+    const totalLng = cluster.reduce((sum, item) => sum + item.partner.lng, 0);
+    const centerLat = totalLat / cluster.length;
+    const centerLng = totalLng / cluster.length;
+
+    const position = new naver.maps.LatLng(centerLat, centerLng);
+    const count = cluster.length;
+
+    // 클러스터 크기는 개수에 비례
+    const size = 40 + Math.min(count, 10) * 3;
+    const fontSize = size > 50 ? 16 : 14;
+
+    // 클러스터 마커 스타일
+    const clusterContent = `
+        <div class="cluster-marker" style="
+            width: ${size}px;
+            height: ${size}px;
+            background: linear-gradient(135deg, var(--color-primary, #7D9675) 0%, var(--color-dark, #5a6e54) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: ${fontSize}px;
+            font-weight: 700;
+            font-family: 'Pretendard', sans-serif;
+            box-shadow: 0 4px 12px rgba(125, 150, 117, 0.4);
+            border: 3px solid white;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        " onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 6px 20px rgba(125, 150, 117, 0.5)';"
+           onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(125, 150, 117, 0.4)';">
+            ${count}
+        </div>
+    `;
+
+    const marker = new naver.maps.Marker({
+        position: position,
+        map: map,
+        icon: {
+            content: clusterContent,
+            anchor: new naver.maps.Point(size / 2, size / 2)
+        }
+    });
+
+    // 클릭 시 해당 클러스터 영역으로 줌인
+    naver.maps.Event.addListener(marker, 'click', () => {
+        const clusterBounds = new naver.maps.LatLngBounds();
+        cluster.forEach(item => {
+            clusterBounds.extend(new naver.maps.LatLng(item.partner.lat, item.partner.lng));
+        });
+        map.fitBounds(clusterBounds, { padding: 60 });
+    });
+
+    clusterMarkers.push(marker);
 }
 
 /* ==========================================

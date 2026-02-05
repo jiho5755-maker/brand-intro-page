@@ -1228,3 +1228,55 @@ p {
         text-align: center;
     }
 }
+
+/* ==========================================
+   마커 클러스터링 스타일
+   ========================================== */
+
+.cluster-marker {
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.cluster-marker:hover {
+    transform: scale(1.1);
+}
+
+/* 클러스터 마커 크기별 스타일 (인라인 스타일과 함께 사용) */
+.cluster-marker-small {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+}
+
+.cluster-marker-medium {
+    width: 50px;
+    height: 50px;
+    font-size: 15px;
+}
+
+.cluster-marker-large {
+    width: 60px;
+    height: 60px;
+    font-size: 16px;
+}
+
+/* 클러스터 마커 호버 효과를 위한 추가 스타일 */
+.cluster-marker::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    background: rgba(125, 150, 117, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.cluster-marker:hover::after {
+    opacity: 1;
+}
