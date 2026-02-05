@@ -1,0 +1,15 @@
+# PDF 문서
+*.pdf
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Claude
+.claude/
+
+# 프로젝트 메타데이터
+PLAN.md
+PREVIEW.md
+README.md
