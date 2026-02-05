@@ -38,6 +38,85 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css">
 </head>
 <body>
+    <!-- 스크롤 진행률 표시바 -->
+    <div class="scroll-progress" aria-hidden="true"></div>
+
+    <!-- 햄버거 버튼 (모바일) -->
+    <button class="hamburger-btn" aria-label="메뉴 열기" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- 모바일 드로워 네비게이션 -->
+    <div class="mobile-drawer" role="dialog" aria-modal="true" aria-label="모바일 메뉴">
+        <div class="drawer-header">
+            <span class="drawer-logo">프레스코21</span>
+            <button class="drawer-close" aria-label="메뉴 닫기">&times;</button>
+        </div>
+        <nav class="drawer-nav">
+            <a href="#hero" data-section="hero" class="active">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                시작
+            </a>
+            <a href="#philosophy" data-section="philosophy">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                철학
+            </a>
+            <a href="#timeline" data-section="timeline">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                여정
+            </a>
+            <a href="#achievements" data-section="achievements">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15l-2 5-3-3H3l2 4h14l2-4h-4l-3 3-2-5z"/><path d="M5 9l7-7 7 7"/><path d="M12 2v13"/></svg>
+                성과
+            </a>
+            <a href="#innovation" data-section="innovation">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                혁신
+            </a>
+            <a href="#education" data-section="education">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                교육
+            </a>
+            <a href="#international" data-section="international">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                국제 교류
+            </a>
+            <a href="#publications" data-section="publications">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                저서
+            </a>
+            <a href="#gallery" data-section="gallery">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                갤러리
+            </a>
+            <a href="#legacy" data-section="legacy">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                레거시
+            </a>
+        </nav>
+        <div class="drawer-footer">
+            <a href="https://foreverlove.co.kr" class="drawer-cta">쇼핑몰 바로가기</a>
+        </div>
+    </div>
+    <div class="drawer-overlay"></div>
+
+    <!-- 섹션 네비게이션 (데스크톱) -->
+    <nav class="section-nav" aria-label="섹션 네비게이션">
+        <ul>
+            <li><a href="#hero" data-section="hero" class="active"><span>시작</span></a></li>
+            <li><a href="#philosophy" data-section="philosophy"><span>철학</span></a></li>
+            <li><a href="#timeline" data-section="timeline"><span>여정</span></a></li>
+            <li><a href="#achievements" data-section="achievements"><span>성과</span></a></li>
+            <li><a href="#innovation" data-section="innovation"><span>혁신</span></a></li>
+            <li><a href="#education" data-section="education"><span>교육</span></a></li>
+            <li><a href="#publications" data-section="publications"><span>저서</span></a></li>
+            <li><a href="#gallery" data-section="gallery"><span>갤러리</span></a></li>
+            <li><a href="#legacy" data-section="legacy"><span>레거시</span></a></li>
+        </ul>
+    </nav>
+
     <!-- Header: 자사몰 공통 헤더 -->
     <header id="header" class="main-header">
         <!-- 자사몰 헤더 코드 -->
@@ -109,90 +188,57 @@
         <!-- 2. Philosophy Section -->
         <section class="philosophy-section" id="philosophy">
             <div class="container">
-                <h2 class="section-title">왜 프레스코21이 다른가</h2>
+                <h2 class="section-title">한 송이 꽃에 담긴 마음</h2>
 
                 <!-- Origin Story -->
                 <div class="origin-story">
-                    <p class="story-quote">"1985년, 세계플라워 올림픽에서 동상을 받았을 때 깨달았습니다. 압화는 단순한 취미가 아니라, 사람들의 삶에 의미를 줄 수 있는 예술이자 과학이라는 것을."</p>
+                    <p class="story-quote">"처음 압화를 시작했을 때, 저는 그저 시들어가는 꽃이 안타까웠습니다.<br>누군가에게 받은 소중한 꽃다발, 특별한 날의 기억들이<br>시간과 함께 사라지는 것이 너무 아쉬웠거든요."</p>
                 </div>
 
-                <!-- Before & After -->
-                <div class="before-after-container">
-                    <div class="problem-solution">
-                        <div class="problem-box">
-                            <h3>기존 압화의 한계</h3>
-                            <ul class="problem-list">
-                                <li>
-                                    <span class="problem-icon">❌</span>
-                                    <div>
-                                        <strong>색이 변한다</strong>
-                                        <p>3-5년 후 누렇게 변색되어 원래의 아름다움 상실</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <span class="problem-icon">❌</span>
-                                    <div>
-                                        <strong>오래 보존되지 않는다</strong>
-                                        <p>습기와 곤충으로 인한 손상, 평균 10년 내 폐기</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <span class="problem-icon">❌</span>
-                                    <div>
-                                        <strong>과학적 가치 미인정</strong>
-                                        <p>박물관, 과학관 전시 표본으로 사용 불가</p>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                <!-- 철학 이야기 -->
+                <div class="philosophy-story">
+                    <div class="story-block">
+                        <h3>시작은 작은 질문이었습니다</h3>
+                        <p>1985년, 세계플라워 올림픽에서 동상을 받던 날.<br>
+                        저는 화려한 무대 뒤에서 오히려 고민에 빠졌습니다.</p>
+                        <p><em>"이 아름다운 작품들도 결국 색이 바래고, 부서지겠지."</em></p>
+                        <p>그 순간부터 30년의 여정이 시작되었습니다.<br>
+                        어떻게 하면 꽃의 아름다움을, 그 순간의 감동을 영원히 간직할 수 있을까.</p>
+                    </div>
 
-                        <div class="solution-arrow">→</div>
+                    <div class="story-block">
+                        <h3>수천 번의 실패, 그리고 발견</h3>
+                        <p>습도, 온도, 빛... 수없이 많은 변수와 싸웠습니다.<br>
+                        때로는 1년을 공들인 작품이 하룻밤 사이에 변색되기도 했습니다.</p>
+                        <p>그래도 포기할 수 없었습니다.<br>
+                        누군가의 소중한 기억이 담긴 꽃을, 영원히 지켜주고 싶었으니까요.</p>
+                    </div>
 
-                        <div class="solution-box">
-                            <h3>프레스코21의 혁신</h3>
-                            <ul class="solution-list">
-                                <li>
-                                    <span class="solution-icon">✅</span>
-                                    <div>
-                                        <strong>영구적 색상 유지</strong>
-                                        <p>특수 처리로 50년 이상 원색 보존 (검증 완료)</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <span class="solution-icon">✅</span>
-                                    <div>
-                                        <strong>완벽한 밀폐 보존</strong>
-                                        <p>아크릴/유리 속 영구 보관, 손상 위험 제로</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <span class="solution-icon">✅</span>
-                                    <div>
-                                        <strong>국가 기관 협업</strong>
-                                        <p>서울대공원, 국립생물자원관 공식 전시 표본 채택</p>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="story-block">
+                        <h3>마침내, 시간을 담는 기술</h3>
+                        <p>투명한 아크릴 속에서 영원히 빛나는 꽃.<br>
+                        50년이 지나도 처음 그 모습 그대로.</p>
+                        <p>이제 서울대공원과 국립생물자원관에서<br>
+                        제 기술로 만든 표본들이 많은 사람들에게 자연의 아름다움을 전하고 있습니다.</p>
                     </div>
                 </div>
 
                 <!-- 핵심 가치 -->
                 <div class="core-values">
                     <div class="value-card">
-                        <div class="value-icon">🔬</div>
-                        <h3>기술 혁신</h3>
-                        <p>30년 연구 끝에 개발한<br>국내 최초 투명 식물 표본 기술<br><strong>특허 4건 보유</strong></p>
+                        <div class="value-icon">🌸</div>
+                        <h3>영원을 담는 기술</h3>
+                        <p>30년의 연구 끝에 완성한<br>투명 식물 표본 기술.<br><strong>시간이 멈춘 듯한 아름다움</strong></p>
                     </div>
                     <div class="value-card">
-                        <div class="value-icon">🎓</div>
-                        <h3>교육과 나눔</h3>
-                        <p>1,000명 이상 강사 양성<br>장애인 경제활동 참여 지원<br><strong>사회적 가치 창출</strong></p>
+                        <div class="value-icon">🤲</div>
+                        <h3>함께 피어나는 꿈</h3>
+                        <p>1,000명이 넘는 분들과<br>꽃을 통해 새로운 삶을 시작했습니다.<br><strong>나눔으로 피어나는 가치</strong></p>
                     </div>
                     <div class="value-card">
-                        <div class="value-icon">🏛️</div>
-                        <h3>신뢰와 검증</h3>
-                        <p>국무총리 표창 수상<br>공공기관 공식 협력<br><strong>국가가 인정한 기술</strong></p>
+                        <div class="value-icon">✨</div>
+                        <h3>진심이 만든 신뢰</h3>
+                        <p>국무총리 표창,<br>공공기관들의 선택.<br><strong>결과로 증명된 진정성</strong></p>
                     </div>
                 </div>
 
@@ -218,7 +264,8 @@
         <!-- 3. Timeline Section -->
         <section class="timeline-section" id="timeline">
             <div class="container">
-                <h2 class="section-title">30년의 여정</h2>
+                <h2 class="section-title">꽃과 함께한 시간들</h2>
+                <p class="section-subtitle">한 걸음씩, 묵묵히 걸어온 길</p>
                 <div class="timeline-container">
                     <div class="timeline-line"></div>
 
@@ -349,7 +396,7 @@
         <!-- 4. Achievements Section -->
         <section class="achievements-section" id="achievements">
             <div class="container">
-                <h2 class="section-title">주요 성과</h2>
+                <h2 class="section-title">걸어온 발자취</h2>
 
                 <div class="achievement-tabs" role="tablist" aria-label="주요 성과 카테고리">
                     <button class="tab-btn active" data-tab="awards" role="tab" aria-selected="true" aria-controls="awards-panel" id="awards-tab">수상</button>
@@ -470,11 +517,13 @@
             </div>
             <div class="innovation-content">
                 <div class="container-inner">
-                    <h2>국내 최초<br>투명 식물 표본 기술</h2>
+                    <h2>시간이 멈춘 순간,<br>영원히 빛나는 아름다움</h2>
 
-                    <p>기존 압화 건조 방식의 한계를 극복한 국내 유일의 투명 식물 표본 제조 기술입니다.</p>
+                    <p>투명한 아크릴 속에서 꽃은 더 이상 시들지 않습니다.<br>
+                    마치 시간이 멈춘 것처럼, 처음 그 순간의 아름다움을 영원히 간직합니다.</p>
 
-                    <p>아크릴유합과 유리접합 기법을 통해 식물의 본래 형태와 색을 그대로 보존하면서도 영구적으로 감상할 수 있는 예술작품으로 승화시켰습니다.</p>
+                    <p>30년의 연구 끝에 완성된 이 기술은<br>
+                    이제 서울대공원, 국립생물자원관에서 자연의 경이로움을 전하고 있습니다.</p>
 
                     <div class="patent-section">
                         <h3>특허 기술</h3>
@@ -504,50 +553,55 @@
         <!-- 6. Education & Impact Section -->
         <section class="education-section" id="education">
             <div class="container">
-                <h2 class="section-title">교육과 사회공헌</h2>
+                <h2 class="section-title">함께 피어나는 꿈</h2>
+                <p class="section-subtitle">혼자 가면 빠르지만, 함께 가면 멀리 갑니다</p>
 
                 <div class="stats-counter">
                     <div class="stat-item">
                         <div class="stat-number" data-value="30">30+</div>
-                        <p class="stat-label">년의 교육 경력</p>
+                        <p class="stat-label">년의 동행</p>
                     </div>
                     <div class="stat-item">
                         <div class="stat-number" data-value="1000">1,000+</div>
-                        <p class="stat-label">명의 강사 배출</p>
+                        <p class="stat-label">명의 동료</p>
                     </div>
                     <div class="stat-item">
                         <div class="stat-number" data-value="50">50+</div>
-                        <p class="stat-label">개국 국제 교류</p>
+                        <p class="stat-label">개국의 인연</p>
                     </div>
                     <div class="stat-item">
                         <div class="stat-number" data-value="4">4</div>
-                        <p class="stat-label">건의 특허 기술</p>
+                        <p class="stat-label">건의 기술 특허</p>
                     </div>
                 </div>
 
                 <div class="education-content">
-                    <p>전국 교육청, 문화센터, 대학교에서의 공예 교육을 통해 여성과 장애인의 경제활동 참여 기회를 확대하고, 지속적인 강사 양성을 통해 새로운 일자리를 창출해 왔습니다.</p>
+                    <p>제가 받은 것들을 나누고 싶었습니다.<br>
+                    꽃이 제게 준 행복을, 더 많은 분들과 함께하고 싶었습니다.</p>
 
-                    <p>특히 장애인 복지관에서의 교육을 통해 청각장애, 하반신장애, 지적장애인들을 일반인과 같은 수준의 자격시험에 합격시키고 강사로 양성하여, 공예를 통한 사회적 가치를 창출하고 있습니다.</p>
+                    <p>특히 잊을 수 없는 것은 장애인 복지관에서의 시간들입니다.<br>
+                    청각장애, 지체장애를 가진 분들이 자격시험에 합격하고, 당당히 강사가 되어<br>
+                    자신만의 작품을 가르치는 모습을 볼 때면 가슴이 벅찹니다.</p>
 
-                    <p>복지관, 요양원, 쉼터 등에서의 꾸준한 봉사활동과 연 2회 이상 장애인 복지관 아이들을 위한 생일잔치 개최 등 공예를 통해 사회에 나눔을 실천하고 있습니다.</p>
+                    <p>꽃을 통해 새로운 삶을 시작한 분들.<br>
+                    그분들의 이야기가 저를 여기까지 오게 한 진짜 이유입니다.</p>
                 </div>
 
                 <div class="education-grid">
                     <div class="education-card">
-                        <div class="education-icon">📚</div>
-                        <h3>공예 교육</h3>
-                        <p>전국 교육청, 문화센터, 대학에서 30년간 공예 교육을 통해 1,000명 이상의 강사 양성</p>
+                        <div class="education-icon">🌱</div>
+                        <h3>씨앗을 심다</h3>
+                        <p>30년간 전국의 교육청, 문화센터, 대학에서<br>1,000명이 넘는 분들과 꽃의 세계를 나눴습니다</p>
                     </div>
                     <div class="education-card">
-                        <div class="education-icon">🚀</div>
-                        <h3>여성 창업 지원</h3>
-                        <p>여성 기업가로서 압화 산업화를 주도하고 여성 창업 활성화에 선도적 역할</p>
+                        <div class="education-icon">🦋</div>
+                        <h3>날개를 달다</h3>
+                        <p>경력단절 여성, 은퇴 후 제2의 인생을 찾는 분들이<br>꽃을 통해 새로운 시작을 합니다</p>
                     </div>
                     <div class="education-card">
-                        <div class="education-icon">❤️</div>
-                        <h3>사회공헌</h3>
-                        <p>장애인 복지관 강사 양성, 요양원 봉사 등 공예를 통한 사회적 가치 창출</p>
+                        <div class="education-icon">💝</div>
+                        <h3>마음을 나누다</h3>
+                        <p>복지관, 요양원에서의 봉사활동.<br>꽃을 통해 전하는 작은 위로와 행복</p>
                     </div>
                 </div>
 
@@ -568,8 +622,8 @@
         <!-- 7. International Exchange Section -->
         <section class="international-section" id="international">
             <div class="container">
-                <h2 class="section-title">국제 교류</h2>
-                <p class="section-subtitle">한·중·일 문화예술 교류 선도</p>
+                <h2 class="section-title">국경을 넘는 아름다움</h2>
+                <p class="section-subtitle">꽃의 언어로 세계와 대화합니다</p>
 
                 <div class="international-grid">
                     <div class="international-card">
@@ -607,7 +661,8 @@
         <!-- 8. Publications Section -->
         <section class="publications-section" id="publications">
             <div class="container">
-                <h2 class="section-title">저서 및 출판</h2>
+                <h2 class="section-title">글로 전하는 이야기</h2>
+                <p class="section-subtitle">배움의 기쁨을 나누고 싶어 펜을 들었습니다</p>
 
                 <!-- Slick 캐러셀 구조 -->
                 <div class="book-carousel">
@@ -642,45 +697,47 @@
         <!-- 9. Gallery Section -->
         <section class="gallery-section" id="gallery">
             <div class="container">
-                <h2 class="section-title">작품 갤러리</h2>
+                <h2 class="section-title">영원히 간직된 순간들</h2>
+                <p class="section-subtitle">시간이 멈춘 듯, 그 순간 그대로</p>
+
+                <!-- 갤러리 필터 버튼 -->
+                <div class="gallery-filters" role="tablist" aria-label="갤러리 카테고리 필터">
+                    <button class="filter-btn active" data-category="all" role="tab" aria-selected="true">전체</button>
+                    <button class="filter-btn" data-category="pressflower" role="tab" aria-selected="false">압화 작품</button>
+                    <button class="filter-btn" data-category="specimen" role="tab" aria-selected="false">투명 표본</button>
+                    <button class="filter-btn" data-category="exhibition" role="tab" aria-selected="false">전시 현장</button>
+                    <button class="filter-btn" data-category="education" role="tab" aria-selected="false">교육 현장</button>
+                </div>
 
                 <div class="gallery-grid">
-                    <!--
-                        최소 12~20장의 고해상도 이미지 권장
-                        - 압화 작품 (6장)
-                        - 투명 식물 표본 (4장)
-                        - 전시 현장 (4장)
-                        - 교육 현장 (4장)
-                        사이즈: 각 800px 이상 (가로/세로 비율 자유)
-                    -->
-                    <div class="gallery-item">
+                    <div class="gallery-item visible" data-category="pressflower">
                         <img src="./images/gallery/gallery-1.jpg" alt="다양한 색상의 꽃잎과 나뭇잎을 이용한 압화 작품. 섬세한 색감과 배치가 돋보이는 프레임 작품">
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item visible" data-category="pressflower">
                         <img src="./images/gallery/gallery-2.jpg" alt="붉은 장미와 흰 자스민이 조화를 이룬 압화 액자. 이진선 대표의 대표작 중 하나">
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item visible" data-category="pressflower">
                         <img src="./images/gallery/gallery-3.jpg" alt="나비와 들꽃을 주제로 한 압화 작품. 자연의 아름다움을 그대로 담은 예술작품">
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item visible" data-category="pressflower">
                         <img src="./images/gallery/gallery-4.jpg" alt="계절의 변화를 표현한 4계절 압화 시리즈. 봄, 여름, 가을, 겨울의 식물 특성을 압화 기법으로 표현">
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item visible" data-category="specimen">
                         <img src="./images/gallery/gallery-5.jpg" alt="투명 식물 표본 기술로 제작된 난초 작품. 식물의 세포 구조까지 투명하게 보이는 혁신적 기법">
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item visible" data-category="specimen">
                         <img src="./images/gallery/gallery-6.jpg" alt="투명 식물 표본으로 제작한 단풍잎 시리즈. 잎맥의 섬세한 구조가 크리스탈처럼 투명하게 표현됨">
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item visible" data-category="exhibition">
                         <img src="./images/gallery/gallery-7.jpg" alt="서울대공원 투명 식물 표본 전시관 전경. 방문객들이 작품을 감상하는 모습">
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item visible" data-category="exhibition">
                         <img src="./images/gallery/gallery-8.jpg" alt="국립생물자원관 특별 전시 현장. 대형 압화 작품들이 벽면을 가득 채운 전시 공간">
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item visible" data-category="education">
                         <img src="./images/gallery/gallery-9.jpg" alt="장애인 압화 교육 현장. 이진선 대표가 수강생들에게 압화 기법을 지도하는 모습">
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item visible" data-category="education">
                         <img src="./images/gallery/gallery-10.jpg" alt="문화센터 압화 수업 현장. 다양한 연령대의 수강생들이 각자의 작품을 만들고 있는 모습">
                     </div>
                 </div>
@@ -702,16 +759,41 @@
         <!-- 10. Legacy Section -->
         <section class="legacy-section" id="legacy">
             <div class="container">
-                <div class="legacy-content">
-                    <h2>꽃은 시들지만,<br>그 아름다움은 영원합니다.</h2>
+                <div class="legacy-container">
+                    <div class="legacy-content">
+                        <h2>꽃은 시들어도,<br>그 순간의 감동은 영원합니다.</h2>
 
-                    <p>30년간 걸어온 길은 압화를 단순한 취미에서 예술이자 과학이며 산업으로 발전시키는 여정이었습니다.</p>
+                        <p>누군가에게 받은 첫 꽃다발의 설렘,<br>
+                        소중한 날의 기억, 사랑하는 이와의 추억.</p>
 
-                    <p>앞으로도 지속적인 기술 혁신과 국제 교류를 통해 대한민국 꽃 공예의 우수성을 세계에 알리고, 더 많은 사람들이 공예를 통해 행복을 찾을 수 있도록 나눔과 교육을 이어가겠습니다.</p>
+                        <p>저는 그 순간들이 시간 속에 사라지는 것이 안타까웠습니다.<br>
+                        그래서 30년을 꽃과 함께 걸어왔습니다.</p>
 
-                    <p class="legacy-signature">프레스코21<br>이진선</p>
+                        <p>이제 그 여정을 더 많은 분들과 나누고 싶습니다.<br>
+                        당신의 소중한 순간을, 영원히 간직해 드리겠습니다.</p>
 
-                    <a href="https://foreverlove.co.kr" class="cta-button">쇼핑몰에서 제품 보기</a>
+                        <p class="legacy-signature">프레스코21<br>이진선 드림</p>
+
+                        <a href="https://foreverlove.co.kr" class="cta-button">작품 보러 가기</a>
+                    </div>
+                    <div class="legacy-visual">
+                        <div class="legacy-image-wrapper">
+                            <img src="./images/sections/workshop.jpg" alt="이진선 대표 작업 현장">
+                            <div class="legacy-stats-overlay">
+                                <div class="legacy-stat">
+                                    <span class="stat-num">30+</span>
+                                    <span class="stat-text">년의 헌신</span>
+                                </div>
+                                <div class="legacy-stat">
+                                    <span class="stat-num">1,000+</span>
+                                    <span class="stat-text">명과 함께</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="legacy-quote">
+                            "시간이 멈춘 듯한 아름다움을<br>당신에게 선물합니다"
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -722,12 +804,55 @@
         <!-- 자사몰 푸터 코드 -->
     </footer>
 
+    <!-- 모바일 하단 네비게이션 -->
+    <nav class="mobile-bottom-nav" aria-label="모바일 네비게이션">
+        <a href="#hero" data-section="hero" class="active">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            </svg>
+            <span>홈</span>
+        </a>
+        <a href="#timeline" data-section="timeline">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span>여정</span>
+        </a>
+        <a href="#gallery" data-section="gallery">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <path d="M21 15l-5-5L5 21"/>
+            </svg>
+            <span>갤러리</span>
+        </a>
+        <a href="#legacy" data-section="legacy">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <span>연락</span>
+        </a>
+    </nav>
+
     <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="이미지 확대 보기">
         <div class="lightbox-content">
             <button class="lightbox-close" aria-label="닫기">&times;</button>
             <img src="" alt="" id="lightbox-image">
         </div>
     </div>
+
+    <!-- Timeline Modal -->
+    <div class="timeline-modal" id="timelineModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="닫기">&times;</button>
+            <span class="modal-year" id="modalYear">2018</span>
+            <h3 class="modal-title" id="modalTitle">타이틀</h3>
+            <p class="modal-description" id="modalDescription">설명</p>
+        </div>
+    </div>
+
 
     <!-- 쇼핑몰 돌아가기 플로팅 버튼 -->
     <a href="https://foreverlove.co.kr" class="floating-shop-btn" aria-label="쇼핑몰로 돌아가기">
