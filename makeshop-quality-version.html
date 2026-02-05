@@ -1,0 +1,214 @@
+<style>
+/* Heritage 페이지 - 원본 디자인 퀄리티 유지 */
+html { scroll-behavior: smooth; }
+.container { max-width: 1440px; margin: 0 auto; padding: 0 80px; }
+.section-title { font-size: 40px; font-weight: 700; color: #121212; text-align: center; margin-bottom: 60px; line-height: 1.3; }
+
+/* Hero Section */
+.hero-section { height: 100vh; position: relative; overflow: hidden; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(/images/hero/hero-main.jpg) no-repeat center center / cover; background-attachment: fixed; display: flex; align-items: center; justify-content: center; }
+.hero-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(to top, rgba(0,0,0,0.5), transparent); z-index: 1; }
+.hero-content { position: relative; z-index: 2; text-align: center; color: white; animation: fadeInUp 1s ease-out; }
+.hero-title { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 700; margin-bottom: 1rem; letter-spacing: 0.05em; line-height: 1.2; }
+.hero-subtitle { font-size: clamp(1rem, 2vw, 1.5rem); font-weight: 300; margin-bottom: 0.5rem; letter-spacing: 0.02em; }
+.hero-since { font-size: clamp(0.875rem, 1.5vw, 1.125rem); font-weight: 400; opacity: 0.85; letter-spacing: 0.05em; }
+.scroll-indicator { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 2; }
+.scroll-indicator span { display: inline-block; width: 2px; height: 30px; background: white; border-radius: 1px; animation: scroll 1.5s infinite; }
+
+@keyframes scroll {
+  0%, 100% { opacity: 1; transform: translateY(0); }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; transform: translateY(10px); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Philosophy Section */
+.philosophy-section { background: #f6f6f6; padding: 120px 0; }
+.philosophy-container { display: grid; grid-template-columns: 60% 1fr; gap: 60px; align-items: center; }
+.philosophy-text { font-size: 18px; line-height: 2; color: #121212; }
+.philosophy-text p { margin-bottom: 2rem; }
+.philosophy-text p:first-child { font-size: 20px; font-weight: 600; color: #FF4600; margin-bottom: 2.5rem; }
+.philosophy-image { position: relative; overflow: hidden; border-radius: 8px; }
+.philosophy-image img { width: 100%; height: auto; display: block; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); transition: transform 0.3s ease; }
+.philosophy-image:hover img { transform: scale(1.02); }
+
+/* Timeline Section */
+.timeline-section { padding: 120px 0; background: white; }
+.timeline-container { position: relative; max-width: 900px; margin: 0 auto; }
+.timeline-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: #dedede; transform: translateX(-50%); }
+.timeline-item { display: flex; margin-bottom: 80px; position: relative; opacity: 0; animation: fadeInTimeline 0.6s ease-out forwards; }
+.timeline-item:nth-child(even) { flex-direction: row-reverse; }
+.timeline-year { flex: 0 0 50%; padding: 0 40px; text-align: right; display: flex; flex-direction: column; justify-content: flex-start; }
+.timeline-item:nth-child(even) .timeline-year { text-align: left; padding-left: 40px; padding-right: 0; }
+.timeline-year h3 { font-size: 24px; font-weight: 700; color: #FF4600; margin: 0; }
+.timeline-content { flex: 0 0 50%; padding: 0 40px; display: flex; flex-direction: column; justify-content: flex-start; }
+.timeline-node { position: absolute; left: 50%; top: 0; width: 12px; height: 12px; background: #FF4600; border-radius: 50%; transform: translateX(-50%); z-index: 2; box-shadow: 0 0 0 4px #f6f6f6; }
+.timeline-title { font-size: 16px; font-weight: 600; color: #121212; margin: 0 0 8px 0; }
+.timeline-description { font-size: 14px; color: #555555; margin: 0; }
+
+.timeline-item:nth-child(1) { animation-delay: 0.1s; }
+.timeline-item:nth-child(2) { animation-delay: 0.2s; }
+.timeline-item:nth-child(3) { animation-delay: 0.3s; }
+.timeline-item:nth-child(4) { animation-delay: 0.4s; }
+.timeline-item:nth-child(5) { animation-delay: 0.5s; }
+.timeline-item:nth-child(6) { animation-delay: 0.6s; }
+.timeline-item:nth-child(7) { animation-delay: 0.7s; }
+.timeline-item:nth-child(8) { animation-delay: 0.8s; }
+.timeline-item:nth-child(9) { animation-delay: 0.9s; }
+.timeline-item:nth-child(10) { animation-delay: 1s; }
+.timeline-item:nth-child(11) { animation-delay: 1.1s; }
+.timeline-item:nth-child(12) { animation-delay: 1.2s; }
+
+@keyframes fadeInTimeline {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 반응형 */
+@media (max-width: 991px) {
+  .container { padding: 0 40px; }
+  .philosophy-container { grid-template-columns: 1fr; }
+  .timeline-line { left: 40px; }
+  .timeline-item { flex-direction: column !important; padding-left: 80px; margin-bottom: 60px; }
+  .timeline-year { flex: 1; padding: 0 0 8px 0; text-align: left !important; }
+  .timeline-content { flex: 1; padding: 0; }
+  .timeline-node { left: 40px; }
+}
+
+@media (max-width: 767px) {
+  .container { padding: 0 20px; }
+  .hero-section { height: 70vh; }
+  .philosophy-section, .timeline-section { padding: 80px 0; }
+  .section-title { font-size: 28px; margin-bottom: 40px; }
+  .timeline-item { padding-left: 60px; }
+  .timeline-line, .timeline-node { left: 30px; }
+}
+</style>
+
+<div id="heritage-main">
+  <div class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">이진선</h1>
+      <p class="hero-subtitle">대한민국 꽃 공예의 선구자이자 최고 장인</p>
+      <p class="hero-since">Since 1985</p>
+    </div>
+    <div class="scroll-indicator"><span></span></div>
+  </div>
+
+  <div class="philosophy-section">
+    <div class="container">
+      <div class="philosophy-container">
+        <div class="philosophy-text">
+          <p>"꽃을 통해 사람을 잇고, 예술을 과학으로 승화시키며, 전통을 산업으로 발전시켜 온 30년의 여정"</p>
+          <p>압화(押花, pressed flower)는 단순한 취미가 아닙니다. 자연의 아름다움을 영원히 간직하는 예술이자, 정밀한 기술과 과학적 연구가 결합된 공예입니다.</p>
+          <p>1999년 프레스코21을 설립한 이래, 저는 압화를 산업화된 문화 콘텐츠로 발전시켜 DIY 키트, 인테리어 소품, 투명 식물 표본 등 다양한 제품을 개발하며 공예 시장을 활성화해 왔습니다.</p>
+          <p>특히 국내 최초로 개발한 투명 식물 표본 기술은 식물의 본래 형태와 색을 그대로 보존하면서도 아크릴과 유리 속에 영구 보관할 수 있게 하여, 서울대공원, 국립생물자원관, 국립대구과학관 등 대한민국을 대표하는 기관들과의 협업을 이끌어냈습니다.</p>
+        </div>
+        <div class="philosophy-image">
+          <img src="/images/sections/workshop.jpg" alt="이진선 대표 작업실">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline-section">
+    <div class="container">
+      <h2 class="section-title">30년의 여정</h2>
+      <div class="timeline-container">
+        <div class="timeline-line"></div>
+        <div class="timeline-item">
+          <div class="timeline-year"><h3>1985</h3></div>
+          <div class="timeline-node"></div>
+          <div class="timeline-content">
+            <p class="timeline-title">세계플라워 올림픽 동상 수상</p>
+            <p class="timeline-description">압화 공예의 국제적 인정</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year"><h3>1999</h3></div>
+          <div class="timeline-node"></div>
+          <div class="timeline-content">
+            <p class="timeline-title">프레스코21 창립</p>
+            <p class="timeline-description">압화 산업화의 시작</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year"><h3>2002</h3></div>
+          <div class="timeline-node"></div>
+          <div class="timeline-content">
+            <p class="timeline-title">실용신안특허 1호 취득</p>
+            <p class="timeline-description">가구표면 압화형성구조 (제 0294485호)</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year"><h3>2005</h3></div>
+          <div class="timeline-node"></div>
+          <div class="timeline-content">
+            <p class="timeline-title">중소기업진흥청장 표창 외 다수</p>
+            <p class="timeline-description">"모범여성기업인" 인정 및 (사)한국압화교육문화협회 창립</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year"><h3>2009</h3></div>
+          <div class="timeline-node"></div>
+          <div class="timeline-content">
+            <p class="timeline-title">국제 수상 연속</p>
+            <p class="timeline-description">중국 북경화훼박람회 우수상, 일본 요코하마 창조전 요미우리 신문사 사장상</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year"><h3>2010</h3></div>
+          <div class="timeline-node"></div>
+          <div class="timeline-content">
+            <p class="timeline-title">국무총리 표창</p>
+            <p class="timeline-description">국가 문화산업 기여 인정</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year"><h3>2018</h3></div>
+          <div class="timeline-node"></div>
+          <div class="timeline-content">
+            <p class="timeline-title">서울대공원 투명 식물표본 전시관 설립</p>
+            <p class="timeline-description">기술 혁신의 정점</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year"><h3>2020</h3></div>
+          <div class="timeline-node"></div>
+          <div class="timeline-content">
+            <p class="timeline-title">표본 제작 방법 특허 등록</p>
+            <p class="timeline-description">제 10-2020-0044902호</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year"><h3>2021</h3></div>
+          <div class="timeline-node"></div>
+          <div class="timeline-content">
+            <p class="timeline-title">국립생물자원관 투명 식물 표본 전시 및 납품</p>
+            <p class="timeline-description">국가 생물자원 보존에 기여</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year"><h3>2023</h3></div>
+          <div class="timeline-node"></div>
+          <div class="timeline-content">
+            <p class="timeline-title">기업 협업 활성화</p>
+            <p class="timeline-description">LG생활건강, 아모레퍼시픽과 산삼표본 등 제품 협업</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year"><h3>2025</h3></div>
+          <div class="timeline-node"></div>
+          <div class="timeline-content">
+            <p class="timeline-title">대한민국 문화산업 발전 기여상</p>
+            <p class="timeline-description">국회 문화체육관광위원회 수상</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

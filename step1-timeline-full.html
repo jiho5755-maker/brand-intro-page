@@ -1,0 +1,287 @@
+<style>
+/* Heritage 페이지 전용 CSS - 메이크샵 인라인 버전 */
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    background-image: url(/images/hero/hero-main.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: 400;
+    margin-bottom: 10px;
+    opacity: 0.95;
+}
+
+.hero-since {
+    font-size: 1rem;
+    font-weight: 300;
+    opacity: 0.8;
+}
+
+/* Philosophy Section */
+.philosophy-section {
+    padding: 120px 0;
+    background: #f6f6f6;
+}
+
+.philosophy-container {
+    display: grid;
+    grid-template-columns: 60% 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.philosophy-text p {
+    font-size: 18px;
+    line-height: 2;
+    margin-bottom: 30px;
+    color: #343434;
+}
+
+.philosophy-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Timeline Section */
+.timeline-section {
+    padding: 120px 0;
+}
+
+.section-title {
+    font-size: 40px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.timeline-container {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.timeline-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #dedede;
+}
+
+.timeline-item {
+    display: flex;
+    margin-bottom: 60px;
+    position: relative;
+}
+
+.timeline-year {
+    width: 120px;
+    text-align: right;
+    padding-right: 40px;
+}
+
+.timeline-year h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FF4600;
+}
+
+.timeline-node {
+    width: 12px;
+    height: 12px;
+    background: #FF4600;
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 8px;
+}
+
+.timeline-content {
+    flex: 1;
+    padding-left: 40px;
+}
+
+.timeline-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.timeline-description {
+    font-size: 14px;
+    color: #555555;
+}
+
+/* 반응형 */
+@media (max-width: 991px) {
+    .philosophy-container {
+        grid-template-columns: 1fr;
+    }
+
+    .timeline-line {
+        left: 60px;
+    }
+
+    .timeline-item {
+        padding-left: 100px;
+    }
+
+    .timeline-year {
+        position: absolute;
+        left: 0;
+        width: 60px;
+        text-align: center;
+        padding-right: 0;
+    }
+
+    .timeline-node {
+        left: 60px;
+    }
+
+    .timeline-content {
+        padding-left: 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .hero-section {
+        height: 70vh;
+    }
+
+    .philosophy-section {
+        padding: 80px 0;
+    }
+
+    .timeline-section {
+        padding: 80px 0;
+    }
+
+    .section-title {
+        font-size: 28px;
+        margin-bottom: 60px;
+    }
+}
+</style>
+
+<div id="heritage-main">
+    <div class="hero-section" id="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">이진선</h1>
+            <p class="hero-subtitle">대한민국 꽃 공예의 선구자이자 최고 장인</p>
+            <p class="hero-since">Since 1985</p>
+        </div>
+    </div>
+
+    <div class="philosophy-section" id="philosophy">
+        <div class="container">
+            <div class="philosophy-container">
+                <div class="philosophy-text">
+                    <p>"꽃을 통해 사람을 잇고, 예술을 과학으로 승화시키며, 전통을 산업으로 발전시켜 온 30년의 여정"</p>
+                    <p>압화(押花, pressed flower)는 단순한 취미가 아닙니다. 자연의 아름다움을 영원히 간직하는 예술이자, 정밀한 기술과 과학적 연구가 결합된 공예입니다.</p>
+                    <p>1999년 프레스코21을 설립한 이래, 저는 압화를 산업화된 문화 콘텐츠로 발전시켜 DIY 키트, 인테리어 소품, 투명 식물 표본 등 다양한 제품을 개발하며 공예 시장을 활성화해 왔습니다.</p>
+                    <p>특히 국내 최초로 개발한 투명 식물 표본 기술은 식물의 본래 형태와 색을 그대로 보존하면서도 아크릴과 유리 속에 영구 보관할 수 있게 하여, 서울대공원, 국립생물자원관, 국립대구과학관 등 대한민국을 대표하는 기관들과의 협업을 이끌어냈습니다.</p>
+                </div>
+                <div class="philosophy-image">
+                    <img src="/images/sections/workshop.jpg" alt="이진선 대표 작업실">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="timeline-section" id="timeline">
+        <div class="container">
+            <h2 class="section-title">30년의 여정</h2>
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+
+                <div class="timeline-item">
+                    <div class="timeline-year"><h3>1985</h3></div>
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <p class="timeline-title">세계플라워 올림픽 동상 수상</p>
+                        <p class="timeline-description">압화 공예의 국제적 인정</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-year"><h3>1999</h3></div>
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <p class="timeline-title">프레스코21 창립</p>
+                        <p class="timeline-description">압화 산업화의 시작</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-year"><h3>2002</h3></div>
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <p class="timeline-title">실용신안특허 1호 취득</p>
+                        <p class="timeline-description">가구표면 압화형성구조</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-year"><h3>2018</h3></div>
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <p class="timeline-title">서울대공원 투명 식물표본 전시관 설립</p>
+                        <p class="timeline-description">기술 혁신의 정점</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-year"><h3>2025</h3></div>
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <p class="timeline-title">대한민국 문화산업 발전 기여상</p>
+                        <p class="timeline-description">국회 문화체육관광위원회 수상</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// jQuery 의존성이 필요하면 디자인 스킨에 추가:
+// <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</script>

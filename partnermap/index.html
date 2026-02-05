@@ -1,0 +1,135 @@
+<!-- 메이크샵 최적화 개선 버전: 성능, 디자인, UX 개선 -->
+<div id="partner-map-container">
+  <!-- 폰트 로드 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Noto+Serif+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- CSS 파일 연결 -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <div class="partner-map-header">
+    <div class="partner-map-header-content">
+      <h1 class="partner-map-title">제휴업체 찾기</h1>
+      <p class="partner-map-subtitle">전국 제휴업체 위치를 한눈에 확인하세요</p>
+    </div>
+  </div>
+  
+  <div id="partner-map-status" class="partner-map-status loading">
+    <h3>데이터를 불러오는 중입니다...</h3>
+    <p>잠시만 기다려주세요.</p>
+  </div>
+  
+  <div class="partner-map-main">
+    <!-- 모바일 오버레이 (Bottom Sheet 배경) -->
+    <div class="partner-map-sidebar-overlay" id="partner-map-sidebar-overlay"></div>
+
+    <div class="partner-map-sidebar" id="partner-map-sidebar">
+      <h2 class="partner-map-sidebar-title">파트너 공방 찾기</h2>
+      
+      <div class="partner-map-search">
+        <input type="text" 
+               id="partner-map-search-input" 
+               class="partner-map-search-input" 
+               placeholder="업체명을 검색하세요..." 
+               autocomplete="off">
+      </div>
+      
+      <div class="partner-map-quick-actions">
+        <button class="partner-map-quick-btn" id="partner-map-btn-location">
+          📍 근처
+        </button>
+        <button class="partner-map-quick-btn" id="partner-map-btn-favorites">
+          ⭐ 찜 <span id="partner-map-favorites-count">(0)</span>
+        </button>
+        <button class="partner-map-quick-btn partner-map-btn-refresh" id="partner-map-btn-refresh">
+          🔄 새로고침
+        </button>
+      </div>
+      
+      <div class="partner-map-count">
+        <div class="partner-map-count-text">전체 업체</div>
+        <div class="partner-map-count-number" id="partner-map-total-count">0</div>
+      </div>
+      
+      <div class="partner-map-filter-section">
+        <div class="partner-map-filter-label">지역</div>
+        <div class="partner-map-filter-buttons" id="partner-map-region-filters">
+          <button class="partner-map-filter-btn active" data-value="all">전체</button>
+        </div>
+      </div>
+      
+      <div class="partner-map-filter-section">
+        <div class="partner-map-filter-label">공예 종류</div>
+        <div class="partner-map-filter-buttons" id="partner-map-category-filters">
+          <button class="partner-map-filter-btn active" data-value="all">전체</button>
+        </div>
+      </div>
+      
+      <div class="partner-map-filter-section">
+        <div class="partner-map-filter-label">협회</div>
+        <div class="partner-map-filter-buttons" id="partner-map-association-filters">
+          <button class="partner-map-filter-btn active" data-value="all">전체</button>
+        </div>
+      </div>
+      
+      <div class="partner-map-filter-section">
+        <div class="partner-map-filter-label">파트너 유형</div>
+        <div class="partner-map-filter-buttons" id="partner-map-partner-type-filters">
+          <button class="partner-map-filter-btn active" data-value="all">전체</button>
+        </div>
+      </div>
+      
+      <div class="partner-map-list">
+        <div class="partner-map-list-header">
+          <span class="partner-map-list-title">업체 목록</span>
+          <select class="partner-map-sort" id="partner-map-sort-select">
+            <option value="name">이름순</option>
+            <option value="distance">거리순</option>
+          </select>
+        </div>
+        <div class="partner-map-items" id="partner-map-items">
+          <!-- 동적으로 생성 -->
+        </div>
+      </div>
+    </div>
+    
+    <div class="partner-map-wrapper">
+      <div class="partner-map-container">
+        <div id="partner-map"></div>
+        <div class="partner-map-loading" id="partner-map-loading">
+          <div class="partner-map-loading-spinner"></div>
+          <div class="partner-map-loading-text">지도를 불러오는 중...</div>
+        </div>
+      </div>
+      
+      <div class="partner-map-controls">
+        <button class="partner-map-control-btn partner-map-btn-list" id="partner-map-btn-list" title="업체 목록">
+          📋
+        </button>
+        <button class="partner-map-control-btn" id="partner-map-btn-style" title="지도 스타일 변경">
+          🗺️
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="partner-map-modal" id="partner-map-modal">
+    <div class="partner-map-modal-content">
+      <div class="partner-map-modal-header">
+        <h2 class="partner-map-modal-title" id="partner-map-modal-title"></h2>
+        <button class="partner-map-modal-close" id="partner-map-modal-close">×</button>
+      </div>
+      <div class="partner-map-modal-body" id="partner-map-modal-body">
+        <!-- 동적으로 생성 -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- JavaScript 파일 연결 -->
+  <script src="script.js"></script>
+</div>
