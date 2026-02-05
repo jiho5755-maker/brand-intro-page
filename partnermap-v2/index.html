@@ -12,8 +12,8 @@
     <!-- Pretendard 폰트 (메이크샵 CDN) -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 
-    <!-- 파트너맵 전용 CSS (v4 - 즐겨찾기, 공유 스타일 추가) -->
-    <link rel="stylesheet" href="./css/style.css?v=4">
+    <!-- 파트너맵 전용 CSS (v5 - 기준점 마커, 거리 배지 추가) -->
+    <link rel="stylesheet" href="./css/style.css?v=5">
 
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#7D9675">
@@ -122,6 +122,14 @@
                             </button>
                         </div>
                     </div>
+
+                    <!-- 안내 메시지 -->
+                    <div class="map-hint">
+                        💡 <strong>지도를 클릭</strong>하면 해당 위치 기준으로 가까운 순으로 정렬됩니다.
+                        <button class="clear-reference-btn" id="clearReferenceBtn" onclick="clearReferencePoint()" style="display: none;">
+                            ✕ 기준점 초기화
+                        </button>
+                    </div>
                 </div>
 
                 <!-- 지도 + 리스트 레이아웃 -->
@@ -179,8 +187,8 @@
     <!-- Toast Container -->
     <div id="toastContainer"></div>
 
-    <!-- 파트너맵 전용 JavaScript (v4 - 즐겨찾기, 공유 추가) -->
-    <script src="./js/main.js?v=4"></script>
+    <!-- 파트너맵 전용 JavaScript (v5 - 지도 클릭 기준점 정렬) -->
+    <script src="./js/main.js?v=5"></script>
 
     <!-- Service Worker 등록 -->
     <script>

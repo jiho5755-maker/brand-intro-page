@@ -154,6 +154,8 @@ async function initPartnerMap() {
    지도 초기화
    ========================================== */
 
+let referenceMarker = null;  // 기준점 마커
+
 function initMap() {
     const mapOptions = {
         center: new naver.maps.LatLng(CONFIG.defaultCenter.lat, CONFIG.defaultCenter.lng),
@@ -166,6 +168,79 @@ function initMap() {
     };
 
     map = new naver.maps.Map('naverMap', mapOptions);
+
+    // 지도 클릭 시 기준점 설정 및 거리순 정렬
+    naver.maps.Event.addListener(map, 'click', function(e) {
+        const clickedLat = e.coord.lat();
+        const clickedLng = e.coord.lng();
+        setReferencePoint(clickedLat, clickedLng);
+    });
+}
+
+// 기준점 설정 및 거리순 정렬
+function setReferencePoint(lat, lng) {
+    // 기존 기준점 마커 제거
+    if (referenceMarker) {
+        referenceMarker.setMap(null);
+    }
+
+    // 새 기준점 마커 생성
+    referenceMarker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(lat, lng),
+        map: map,
+        icon: {
+            content: `<div class="reference-marker">📍</div>`,
+            anchor: new naver.maps.Point(15, 30)
+        },
+        zIndex: 1000
+    });
+
+    // 거리 계산 및 정렬
+    filteredPartners = partners.map(partner => ({
+        ...partner,
+        distance: calculateDistance(lat, lng, partner.lat, partner.lng)
+    })).sort((a, b) => a.distance - b.distance);
+
+    // 필터 적용 (현재 필터 유지하면서 거리순 정렬)
+    if (currentFilters.category !== 'all' || currentFilters.region !== 'all' ||
+        currentFilters.association !== 'all' || currentFilters.partnerType !== 'all' ||
+        currentFilters.search || showFavoritesOnly) {
+        applyFilters();
+        // 거리 정보 다시 추가
+        filteredPartners = filteredPartners.map(partner => ({
+            ...partner,
+            distance: calculateDistance(lat, lng, partner.lat, partner.lng)
+        })).sort((a, b) => a.distance - b.distance);
+    }
+
+    renderPartnerList();
+
+    // 초기화 버튼 표시
+    const clearBtn = document.getElementById('clearReferenceBtn');
+    if (clearBtn) clearBtn.style.display = 'inline-block';
+
+    showToast(`선택한 위치 기준 ${filteredPartners.length}개 공방 정렬됨`, 'success');
+}
+
+// 기준점 초기화
+function clearReferencePoint() {
+    if (referenceMarker) {
+        referenceMarker.setMap(null);
+        referenceMarker = null;
+    }
+
+    // 초기화 버튼 숨김
+    const clearBtn = document.getElementById('clearReferenceBtn');
+    if (clearBtn) clearBtn.style.display = 'none';
+
+    // 거리 정보 제거하고 필터 다시 적용
+    filteredPartners = filteredPartners.map(p => {
+        const { distance, ...rest } = p;
+        return rest;
+    });
+
+    applyFilters();
+    showToast('기준점이 초기화되었습니다.', 'info');
 }
 
 /* ==========================================
@@ -511,6 +586,9 @@ function renderPartnerList() {
 
 function createPartnerCardHTML(partner) {
     const isFav = isFavorite(partner.id);
+    const distanceText = partner.distance !== undefined
+        ? `<span class="distance-badge">📏 ${partner.distance.toFixed(1)}km</span>`
+        : '';
     return `
         <div class="partner-card" data-id="${partner.id}">
             <button class="favorite-btn ${isFav ? 'active' : ''}"
@@ -519,6 +597,7 @@ function createPartnerCardHTML(partner) {
                     title="즐겨찾기">
                 ${isFav ? '❤️' : '🤍'}
             </button>
+            ${distanceText ? `<div class="distance-indicator">${distanceText}</div>` : ''}
             <div class="partner-logo">
                 <img src="${partner.logoUrl || './images/default-logo.jpg'}"
                      alt="${escapeHtml(partner.name)}"
