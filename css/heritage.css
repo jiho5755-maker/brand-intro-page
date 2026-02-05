@@ -762,7 +762,7 @@ html {
     transform: scale(1.08);
 }
 
-/* Lightbox */
+/* Lightbox - 메이크샵 보안 필터 우회 */
 .lightbox {
     position: fixed;
     top: 0;
@@ -770,10 +770,14 @@ html {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.95);
-    display: flex;
+    display: none; /* 기본 숨김 */
     align-items: center;
     justify-content: center;
     z-index: 9999;
+}
+
+.lightbox.active {
+    display: flex; /* 활성화 시 표시 */
     animation: fadeIn 0.3s ease-out;
 }
 
@@ -1164,5 +1168,212 @@ html {
     .patent-list li {
         font-size: 13px;
         padding-left: 24px;
+    }
+}
+
+/* ==========================================
+   Publications Section - Slick Carousel (메이크샵 최적화)
+   ========================================== */
+
+.book-carousel {
+    padding: 0 40px; /* 화살표 공간 */
+    margin-bottom: 60px;
+}
+
+.book-carousel .slick-slide {
+    padding: 0 10px; /* 슬라이드 간격 */
+}
+
+.book-carousel .slick-list {
+    margin: 0 -10px;
+    overflow: hidden;
+}
+
+.book-item {
+    text-align: center;
+    padding: 20px;
+    outline: none; /* Slick focus outline 제거 */
+}
+
+.book-cover {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    margin: 0 auto 20px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.book-item:hover .book-cover {
+    transform: translateY(-8px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.book-item h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--cw-heading-color);
+    line-height: 1.4;
+}
+
+.book-item p {
+    font-size: 14px;
+    color: var(--cw-color-60);
+}
+
+/* Slick 화살표 커스터마이징 */
+.book-carousel .slick-prev,
+.book-carousel .slick-next {
+    width: 40px;
+    height: 40px;
+    z-index: 10;
+}
+
+.book-carousel .slick-prev {
+    left: -40px;
+}
+
+.book-carousel .slick-next {
+    right: -40px;
+}
+
+.book-carousel .slick-prev:before,
+.book-carousel .slick-next:before {
+    font-size: 40px;
+    color: var(--cw-heading-color);
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.book-carousel .slick-prev:hover:before,
+.book-carousel .slick-next:hover:before {
+    opacity: 1;
+}
+
+/* Slick 페이지네이션 */
+.book-carousel .slick-dots {
+    bottom: -40px;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+.book-carousel .slick-dots li {
+    margin: 0 5px;
+}
+
+.book-carousel .slick-dots li button:before {
+    font-size: 12px;
+    color: var(--cw-color-30);
+    opacity: 1;
+    transition: color 0.3s ease;
+}
+
+.book-carousel .slick-dots li.slick-active button:before {
+    color: var(--cw-point-color);
+}
+
+.book-carousel .slick-dots li:hover button:before {
+    color: var(--cw-heading-color);
+}
+
+/* 반응형 스타일 */
+@media (max-width: 1199px) {
+    .book-carousel {
+        padding: 0 30px;
+    }
+}
+
+@media (max-width: 767px) {
+    .book-carousel {
+        padding: 0 20px;
+        margin-bottom: 40px;
+    }
+
+    .book-carousel .slick-prev {
+        left: -20px;
+    }
+
+    .book-carousel .slick-next {
+        right: -20px;
+    }
+
+    .book-carousel .slick-prev:before,
+    .book-carousel .slick-next:before {
+        font-size: 32px;
+    }
+
+    .book-item {
+        padding: 15px;
+    }
+
+    .book-item h3 {
+        font-size: 16px;
+    }
+
+    .book-item p {
+        font-size: 13px;
+    }
+
+    .book-cover {
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .book-carousel {
+        padding: 0 10px;
+    }
+
+    .book-carousel .slick-prev,
+    .book-carousel .slick-next {
+        width: 30px;
+        height: 30px;
+    }
+
+    .book-carousel .slick-prev:before,
+    .book-carousel .slick-next:before {
+        font-size: 24px;
+    }
+}
+
+/* 쇼핑몰 돌아가기 플로팅 버튼 */
+.floating-shop-btn {
+    position: fixed;
+    top: 120px;
+    right: 40px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: #425b51;
+    color: white;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.floating-shop-btn:hover {
+    background: #354a41;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 767px) {
+    .floating-shop-btn {
+        top: auto;
+        bottom: 20px;
+        right: 20px;
+        padding: 14px 18px;
+        border-radius: 50%;
+    }
+    .floating-shop-btn span {
+        display: none;
     }
 }

@@ -306,26 +306,26 @@ select:focus {
     --cw-border-radius: 4px;
 }
 
-/* 자사몰 폰트 정의 */
+/* Pretendard 폰트 정의 (jsDelivr CDN) */
 @font-face {
     font-family: 'Pretendard';
     font-weight: 700;
     font-display: swap;
-    src: local('Pretendard Bold'), url(//skin.makeshop.co.kr/skin/rw_shop/pretendard/woff2/Pretendard-Bold.woff2) format('woff2');
+    src: local('Pretendard Bold'), url(https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-bold.woff2) format('woff2');
 }
 
 @font-face {
     font-family: 'Pretendard';
     font-weight: 600;
     font-display: swap;
-    src: local('Pretendard SemiBold'), url(//skin.makeshop.co.kr/skin/rw_shop/pretendard/woff2/Pretendard-SemiBold.woff2) format('woff2');
+    src: local('Pretendard SemiBold'), url(https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-semibold.woff2) format('woff2');
 }
 
 @font-face {
     font-family: 'Pretendard';
     font-weight: 400;
     font-display: swap;
-    src: local('Pretendard Regular'), url(//skin.makeshop.co.kr/skin/rw_shop/pretendard/woff2/Pretendard-Regular.woff2) format('woff2');
+    src: local('Pretendard Regular'), url(https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-regular.woff2) format('woff2');
 }
 
 /* 자사몰 버튼 스타일 */
