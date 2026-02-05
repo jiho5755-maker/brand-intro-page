@@ -1,0 +1,461 @@
+/* ============================================
+   구매 버튼 영역 - 고도화 리뉴얼 버전
+   기존 간편구매.css에서 기존 구매 버튼 스타일(169-177라인)을
+   이 CSS로 교체하세요.
+   ============================================ */
+
+/* 버튼 영역 컨테이너 */
+.prd-btns {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 16px;
+    padding: 0;
+    overflow: visible !important;
+    box-sizing: border-box;
+}
+
+.prd-btns *,
+.prd-btns *::before,
+.prd-btns *::after {
+    box-sizing: border-box;
+}
+
+
+/* ============================================
+   기본 구매 버튼 (바로구매 + 장바구니)
+   ============================================ */
+
+/* 버튼 래퍼 */
+.buyBtnWrap {
+    display: flex !important;
+    visibility: visible !important;
+    flex-direction: row;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 12px;
+    overflow: visible !important;
+}
+
+/* 버튼 공통 스타일 */
+.buyBtnWrap a {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 56px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    isolation: isolate;
+}
+
+/* 버튼 호버 효과 - 공통 */
+.buyBtnWrap a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 8px;
+    z-index: -1;
+}
+
+.buyBtnWrap a:hover::before {
+    opacity: 1;
+}
+
+/* 버튼 클릭 효과 */
+.buyBtnWrap a:active {
+    transform: scale(0.98);
+}
+
+/* 버튼 텍스트 */
+.buyBtnWrap a .btn-text {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+
+/* --- 장바구니 버튼 --- */
+.buyBtnWrap a.btn_cart {
+    background: #fff;
+    border: 2px solid #000;
+    color: #000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.buyBtnWrap a.btn_cart:hover {
+    background: #f8f8f8;
+    border-color: #333;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.buyBtnWrap a.btn_cart:focus {
+    outline: 3px solid rgba(0, 0, 0, 0.2);
+    outline-offset: 2px;
+}
+
+
+/* --- 바로구매 버튼 --- */
+.buyBtnWrap a.btn_buy {
+    background: linear-gradient(135deg, #000 0%, #2a2a2a 100%);
+    border: 2px solid #000;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.buyBtnWrap a.btn_buy:hover {
+    background: linear-gradient(135deg, #1a1a1a 0%, #3a3a3a 100%);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px);
+}
+
+.buyBtnWrap a.btn_buy:focus {
+    outline: 3px solid rgba(0, 0, 0, 0.3);
+    outline-offset: 2px;
+}
+
+
+/* ============================================
+   간편결제 버튼 영역
+   ============================================ */
+
+/* 간편결제 래퍼 */
+.easyPayBtnWrap {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+    position: relative;
+    overflow: visible !important;
+}
+
+.easyPayBtnWrap > * {
+    flex: 1 1 0;
+    min-width: 0;
+    width: 100%;
+    overflow: visible !important;
+    position: relative;
+}
+
+
+/* ============================================
+   네이버페이 버튼
+   ============================================ */
+
+/* 네이버페이 컨테이너 */
+.easyPayBtnWrap #nhn_btn {
+    flex: 1 1 0 !important;
+    min-width: 0;
+    width: 100% !important;
+    height: 56px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    overflow: visible !important;
+    position: relative !important;
+}
+
+/* 네이버페이 기본 요소 숨기기 */
+.easyPayBtnWrap #nhn_btn > div:not(.customized),
+.easyPayBtnWrap #nhn_btn .npay_storebtn_bx,
+.easyPayBtnWrap #nhn_btn table,
+.easyPayBtnWrap #nhn_btn tbody,
+.easyPayBtnWrap #nhn_btn tr,
+.easyPayBtnWrap #nhn_btn td,
+.easyPayBtnWrap #nhn_btn iframe {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* 네이버페이 버튼 스타일 */
+.easyPayBtnWrap #nhn_btn > *,
+.easyPayBtnWrap #nhn_btn a,
+.easyPayBtnWrap #nhn_btn button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px;
+    width: 100% !important;
+    height: 56px !important;
+    padding: 0 24px !important;
+    margin: 0 !important;
+    background: linear-gradient(135deg, #00C73C 0%, #00b134 100%) !important;
+    border: 2px solid #00C73C !important;
+    border-radius: 8px !important;
+    color: #fff !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+    box-shadow: 0 4px 12px rgba(0, 199, 60, 0.25) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* 네이버페이 호버 효과 */
+.easyPayBtnWrap #nhn_btn > *:hover,
+.easyPayBtnWrap #nhn_btn a:hover,
+.easyPayBtnWrap #nhn_btn button:hover {
+    background: linear-gradient(135deg, #00b134 0%, #009d2d 100%) !important;
+    box-shadow: 0 6px 16px rgba(0, 199, 60, 0.35) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* 네이버페이 클릭 효과 */
+.easyPayBtnWrap #nhn_btn > *:active,
+.easyPayBtnWrap #nhn_btn a:active,
+.easyPayBtnWrap #nhn_btn button:active {
+    transform: scale(0.98) !important;
+}
+
+/* 네이버페이 포커스 */
+.easyPayBtnWrap #nhn_btn > *:focus,
+.easyPayBtnWrap #nhn_btn a:focus,
+.easyPayBtnWrap #nhn_btn button:focus {
+    outline: 3px solid rgba(0, 199, 60, 0.3) !important;
+    outline-offset: 2px !important;
+}
+
+/* 네이버페이 아이콘 */
+.easyPayBtnWrap #nhn_btn img,
+.easyPayBtnWrap #nhn_btn svg {
+    width: 24px !important;
+    height: 24px !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+}
+
+/* 네이버페이 텍스트 */
+.easyPayBtnWrap #nhn_btn span {
+    color: #fff !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+}
+
+
+/* ============================================
+   카카오페이 버튼
+   ============================================ */
+
+/* 카카오페이 컨테이너 */
+.easyPayBtnWrap #kakaopay_order_btn {
+    flex: 1 1 0 !important;
+    min-width: 0;
+    width: 100% !important;
+    height: 56px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    overflow: visible !important;
+    position: relative !important;
+}
+
+/* 카카오페이 버튼 스타일 */
+.easyPayBtnWrap #kakaopay_order_btn > *,
+.easyPayBtnWrap #kakaopay_order_btn a,
+.easyPayBtnWrap #kakaopay_order_btn button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px;
+    width: 100% !important;
+    height: 56px !important;
+    padding: 0 24px !important;
+    margin: 0 !important;
+    background: #FEE500 !important;
+    border: 2px solid #FFE500 !important;
+    border-radius: 8px !important;
+    color: #3C1E1E !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+    box-shadow: 0 4px 12px rgba(254, 229, 0, 0.3) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* 카카오페이 호버 효과 */
+.easyPayBtnWrap #kakaopay_order_btn > *:hover,
+.easyPayBtnWrap #kakaopay_order_btn a:hover,
+.easyPayBtnWrap #kakaopay_order_btn button:hover {
+    background: #FFD700 !important;
+    box-shadow: 0 6px 16px rgba(254, 229, 0, 0.4) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* 카카오페이 클릭 효과 */
+.easyPayBtnWrap #kakaopay_order_btn > *:active,
+.easyPayBtnWrap #kakaopay_order_btn a:active,
+.easyPayBtnWrap #kakaopay_order_btn button:active {
+    transform: scale(0.98) !important;
+}
+
+/* 카카오페이 포커스 */
+.easyPayBtnWrap #kakaopay_order_btn > *:focus,
+.easyPayBtnWrap #kakaopay_order_btn a:focus,
+.easyPayBtnWrap #kakaopay_order_btn button:focus {
+    outline: 3px solid rgba(254, 229, 0, 0.4) !important;
+    outline-offset: 2px !important;
+}
+
+/* 카카오페이 아이콘 */
+.easyPayBtnWrap #kakaopay_order_btn img,
+.easyPayBtnWrap #kakaopay_order_btn svg {
+    width: 24px !important;
+    height: 24px !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+}
+
+/* 카카오페이 텍스트 */
+.easyPayBtnWrap #kakaopay_order_btn span {
+    color: #3C1E1E !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+}
+
+
+/* ============================================
+   반응형: 태블릿 (768px ~ 991.98px)
+   ============================================ */
+@media (min-width: 768px) and (max-width: 991.98px) {
+
+    /* 버튼 높이 조정 */
+    .buyBtnWrap a,
+    .easyPayBtnWrap #nhn_btn,
+    .easyPayBtnWrap #nhn_btn > *,
+    .easyPayBtnWrap #kakaopay_order_btn,
+    .easyPayBtnWrap #kakaopay_order_btn > * {
+        height: 54px !important;
+        font-size: 15px !important;
+    }
+
+    /* 간격 조정 */
+    .buyBtnWrap,
+    .easyPayBtnWrap {
+        gap: 10px;
+    }
+}
+
+
+/* ============================================
+   반응형: 모바일 (767.98px 이하)
+   ============================================ */
+@media (max-width: 767.98px) {
+
+    /* 버튼 영역 기본 설정 */
+    .prd-btns {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        margin-bottom: 12px;
+    }
+
+    /* 기본 구매 버튼 - 세로 배치 */
+    .buyBtnWrap {
+        flex-direction: column !important;
+        gap: 10px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .buyBtnWrap a {
+        width: 100% !important;
+        min-width: 100% !important;
+        height: 54px !important;
+        font-size: 15px !important;
+    }
+
+    /* 간편결제 버튼 - 세로 배치 */
+    .easyPayBtnWrap {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+
+    .easyPayBtnWrap > * {
+        width: 100% !important;
+        min-width: 100% !important;
+    }
+
+    /* 네이버페이 모바일 */
+    .easyPayBtnWrap #nhn_btn {
+        height: 54px !important;
+    }
+
+    .easyPayBtnWrap #nhn_btn > *,
+    .easyPayBtnWrap #nhn_btn a,
+    .easyPayBtnWrap #nhn_btn button {
+        height: 54px !important;
+        font-size: 15px !important;
+        padding: 0 20px !important;
+    }
+
+    /* 카카오페이 모바일 */
+    .easyPayBtnWrap #kakaopay_order_btn {
+        height: 54px !important;
+    }
+
+    .easyPayBtnWrap #kakaopay_order_btn > *,
+    .easyPayBtnWrap #kakaopay_order_btn a,
+    .easyPayBtnWrap #kakaopay_order_btn button {
+        height: 54px !important;
+        font-size: 15px !important;
+        padding: 0 20px !important;
+    }
+}
+
+
+/* ============================================
+   반응형: 아주 작은 모바일 (480px 이하)
+   ============================================ */
+@media (max-width: 480px) {
+
+    /* 버튼 높이 더 조정 */
+    .buyBtnWrap a,
+    .easyPayBtnWrap #nhn_btn,
+    .easyPayBtnWrap #nhn_btn > *,
+    .easyPayBtnWrap #kakaopay_order_btn,
+    .easyPayBtnWrap #kakaopay_order_btn > * {
+        height: 52px !important;
+        font-size: 14px !important;
+        padding: 0 16px !important;
+    }
+
+    /* 간격 조정 */
+    .buyBtnWrap,
+    .easyPayBtnWrap {
+        gap: 8px !important;
+    }
+}
