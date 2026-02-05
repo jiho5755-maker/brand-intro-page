@@ -11,7 +11,7 @@ const GOOGLE_SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbxfp4SbpsU
 const CONFIG = {
     defaultCenter: { lat: 37.5665, lng: 126.9780 }, // 서울 시청
     defaultZoom: 11,
-    cacheKey: 'fresco21_partners',
+    cacheKey: 'fresco21_partners_v2',  // 캐시 키 변경 (이전 캐시 무효화)
     cacheDuration: 24 * 60 * 60 * 1000 // 24시간
 };
 
@@ -111,21 +111,27 @@ function initMap() {
    ========================================== */
 
 async function loadPartnerData() {
-    // 캐시 확인
+    // 캐시 확인 (빈 배열이면 무시하고 새로 로드)
     const cached = getCache();
-    if (cached) return cached;
+    if (cached && cached.length > 0) return cached;
 
     try {
         const response = await fetch(GOOGLE_SHEET_API_URL);
         const data = await response.json();
 
+        console.log('API 응답:', data);  // 디버깅용
+
         // API 응답 구조 확인 (원본과 동일하게 data.partners 사용)
         const rawPartners = data.partners || data;
+
+        console.log('rawPartners:', rawPartners);  // 디버깅용
 
         if (!Array.isArray(rawPartners)) {
             console.error('잘못된 데이터 형식:', data);
             return [];
         }
+
+        console.log('파트너 수:', rawPartners.length);  // 디버깅용
 
         // 데이터 가공 (status 필터 제거 - 원본에 없음)
         const partners = rawPartners
