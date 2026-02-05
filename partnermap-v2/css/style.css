@@ -366,6 +366,12 @@ p {
     align-items: center;
     justify-content: center;
     z-index: 10;
+    transition: opacity 0.3s ease;
+}
+
+.map-loading.d-none {
+    display: none !important;
+    pointer-events: none;
 }
 
 .loading-spinner {

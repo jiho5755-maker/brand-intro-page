@@ -171,29 +171,38 @@ function initMap() {
 
     // 지도 클릭 시 기준점 설정 및 거리순 정렬
     naver.maps.Event.addListener(map, 'click', function(e) {
-        const clickedLat = e.coord.lat();
-        const clickedLng = e.coord.lng();
+        console.log('지도 클릭됨:', e);  // 디버깅
+        // 네이버 지도 API v3 좌표 접근
+        const coord = e.coord || e.latlng;
+        const clickedLat = coord.y || coord.lat();
+        const clickedLng = coord.x || coord.lng();
+        console.log('좌표:', clickedLat, clickedLng);  // 디버깅
         setReferencePoint(clickedLat, clickedLng);
     });
 }
 
 // 기준점 설정 및 거리순 정렬
 function setReferencePoint(lat, lng) {
+    console.log('setReferencePoint 호출:', lat, lng);  // 디버깅
+
     // 기존 기준점 마커 제거
     if (referenceMarker) {
         referenceMarker.setMap(null);
     }
 
-    // 새 기준점 마커 생성
+    // 새 기준점 마커 생성 (HTML 마커)
     referenceMarker = new naver.maps.Marker({
         position: new naver.maps.LatLng(lat, lng),
         map: map,
         icon: {
-            content: `<div class="reference-marker">📍</div>`,
-            anchor: new naver.maps.Point(15, 30)
+            content: '<div style="width:40px;height:40px;line-height:40px;text-align:center;font-size:28px;animation:pulse 1.5s infinite;">📍</div>',
+            size: new naver.maps.Size(40, 40),
+            anchor: new naver.maps.Point(20, 40)
         },
         zIndex: 1000
     });
+
+    console.log('기준점 마커 생성됨:', referenceMarker);  // 디버깅
 
     // 거리 계산 및 정렬
     filteredPartners = partners.map(partner => ({
