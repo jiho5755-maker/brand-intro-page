@@ -11,7 +11,7 @@ const GOOGLE_SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbxfp4SbpsU
 const CONFIG = {
     defaultCenter: { lat: 37.5665, lng: 126.9780 }, // 서울 시청
     defaultZoom: 11,
-    cacheKey: 'fresco21_partners_v2',  // 캐시 키 변경 (이전 캐시 무효화)
+    cacheKey: 'fresco21_partners_v3',  // 캐시 키 변경 (이전 캐시 무효화)
     cacheDuration: 24 * 60 * 60 * 1000 // 24시간
 };
 
