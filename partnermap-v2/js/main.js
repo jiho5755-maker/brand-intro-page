@@ -22,6 +22,8 @@ let filteredPartners = [];
 let currentFilters = {
     category: 'all',
     region: 'all',
+    association: 'all',
+    partnerType: 'all',
     search: ''
 };
 
@@ -66,14 +68,12 @@ async function initPartnerMap() {
         // 4. 필터 생성
         generateFilters();
 
-        // 5. 마커 생성
-        createMarkers();
-
-        // 6. 리스트 렌더링
-        renderPartnerList();
-
-        // 7. 이벤트 리스너
+        // 5. 이벤트 리스너
         setupEventListeners();
+
+        // 6. URL 파라미터 로드 및 필터 적용
+        loadUrlParams();
+        applyFilters();
 
         // 로딩 숨김
         hideLoading();
@@ -148,7 +148,12 @@ async function loadPartnerData() {
                 description: p.description,
                 imageUrl: p.imageUrl,
                 logoUrl: p.logoUrl,
+                association: p.association || '',
                 partnerType: p.partnerType
+                    ? (typeof p.partnerType === 'string'
+                        ? p.partnerType.split(',').map(t => t.trim())
+                        : p.partnerType)
+                    : []
             }));
 
         setCache(partners);
@@ -197,6 +202,51 @@ function generateFilters() {
         btn.textContent = region;
         regionFilters.appendChild(btn);
     });
+
+    // 협회 추출
+    const associations = new Set();
+    partners.forEach(p => {
+        if (p.association) {
+            p.association.split(',').forEach(a => {
+                const trimmed = a.trim();
+                if (trimmed) associations.add(trimmed);
+            });
+        }
+    });
+
+    // 협회 버튼 생성
+    const associationFilters = document.getElementById('associationFilters');
+    if (associationFilters && associations.size > 0) {
+        Array.from(associations).sort().forEach(assoc => {
+            const btn = document.createElement('button');
+            btn.className = 'btn filter-btn';
+            btn.dataset.association = assoc;
+            btn.textContent = assoc;
+            associationFilters.appendChild(btn);
+        });
+    }
+
+    // 파트너 유형 추출 (협회, 인플루언서 등)
+    const partnerTypes = new Set();
+    partners.forEach(p => {
+        if (p.partnerType && Array.isArray(p.partnerType)) {
+            p.partnerType.forEach(type => {
+                if (type && type.trim()) partnerTypes.add(type.trim());
+            });
+        }
+    });
+
+    // 파트너 유형 버튼 생성
+    const partnerTypeFilters = document.getElementById('partnerTypeFilters');
+    if (partnerTypeFilters && partnerTypes.size > 0) {
+        Array.from(partnerTypes).sort().forEach(type => {
+            const btn = document.createElement('button');
+            btn.className = 'btn filter-btn';
+            btn.dataset.partnerType = type;
+            btn.textContent = type;
+            partnerTypeFilters.appendChild(btn);
+        });
+    }
 }
 
 /* ==========================================
@@ -308,6 +358,23 @@ function applyFilters() {
         if (currentFilters.region !== 'all') {
             const region = extractRegion(partner.address);
             if (region !== currentFilters.region) {
+                return false;
+            }
+        }
+
+        // 협회
+        if (currentFilters.association !== 'all') {
+            const assocs = partner.association
+                ? partner.association.split(',').map(a => a.trim())
+                : [];
+            if (!assocs.includes(currentFilters.association)) {
+                return false;
+            }
+        }
+
+        // 파트너 유형
+        if (currentFilters.partnerType !== 'all') {
+            if (!partner.partnerType || !partner.partnerType.includes(currentFilters.partnerType)) {
                 return false;
             }
         }
@@ -510,6 +577,7 @@ function setupEventListeners() {
             this.classList.add('active');
             currentFilters.category = this.dataset.category;
             applyFilters();
+            updateUrlParams();
         });
     });
 
@@ -521,6 +589,31 @@ function setupEventListeners() {
             this.classList.add('active');
             currentFilters.region = this.dataset.region;
             applyFilters();
+            updateUrlParams();
+        });
+    });
+
+    // 협회 필터
+    document.querySelectorAll('#associationFilters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('#associationFilters .filter-btn')
+                .forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentFilters.association = this.dataset.association;
+            applyFilters();
+            updateUrlParams();
+        });
+    });
+
+    // 파트너 유형 필터
+    document.querySelectorAll('#partnerTypeFilters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('#partnerTypeFilters .filter-btn')
+                .forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentFilters.partnerType = this.dataset.partnerType;
+            applyFilters();
+            updateUrlParams();
         });
     });
 
@@ -594,6 +687,64 @@ function showError(message) {
             </div>
         `;
     }
+}
+
+/* ==========================================
+   URL 파라미터 관리
+   ========================================== */
+
+function updateUrlParams() {
+    const params = new URLSearchParams();
+
+    if (currentFilters.category !== 'all') params.set('category', currentFilters.category);
+    if (currentFilters.region !== 'all') params.set('region', currentFilters.region);
+    if (currentFilters.association !== 'all') params.set('association', currentFilters.association);
+    if (currentFilters.partnerType !== 'all') params.set('partnerType', currentFilters.partnerType);
+    if (currentFilters.search) params.set('search', currentFilters.search);
+
+    const newUrl = params.toString()
+        ? `${window.location.pathname}?${params.toString()}`
+        : window.location.pathname;
+
+    window.history.replaceState({}, '', newUrl);
+}
+
+function loadUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.get('category')) {
+        currentFilters.category = params.get('category');
+        activateFilterButton('categoryFilters', 'category', currentFilters.category);
+    }
+    if (params.get('region')) {
+        currentFilters.region = params.get('region');
+        activateFilterButton('regionFilters', 'region', currentFilters.region);
+    }
+    if (params.get('association')) {
+        currentFilters.association = params.get('association');
+        activateFilterButton('associationFilters', 'association', currentFilters.association);
+    }
+    if (params.get('partnerType')) {
+        currentFilters.partnerType = params.get('partnerType');
+        activateFilterButton('partnerTypeFilters', 'partnerType', currentFilters.partnerType);
+    }
+    if (params.get('search')) {
+        currentFilters.search = params.get('search');
+        const searchInput = document.getElementById('partnerSearch');
+        if (searchInput) searchInput.value = currentFilters.search;
+    }
+}
+
+function activateFilterButton(containerId, dataAttr, value) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    container.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset[dataAttr] === value) {
+            btn.classList.add('active');
+        }
+    });
 }
 
 /* ==========================================
