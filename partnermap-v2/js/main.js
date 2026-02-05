@@ -172,16 +172,48 @@ function initMap() {
 
     map = new naver.maps.Map('naverMap', mapOptions);
 
-    // 지도 클릭 시 기준점 설정 및 거리순 정렬
-    naver.maps.Event.addListener(map, 'click', function(e) {
-        console.log('지도 클릭됨:', e);  // 디버깅
-        // 네이버 지도 API v3 좌표 접근
-        const coord = e.coord || e.latlng;
-        const clickedLat = coord.y || coord.lat();
-        const clickedLng = coord.x || coord.lng();
-        console.log('좌표:', clickedLat, clickedLng);  // 디버깅
-        setReferencePoint(clickedLat, clickedLng);
+    // 지도 클릭 감지 (mousedown + mouseup 조합으로 드래그와 구분)
+    let mouseDownPos = null;
+    let mouseDownTime = 0;
+
+    naver.maps.Event.addListener(map, 'mousedown', function(e) {
+        if (e && e.coord) {
+            mouseDownPos = {
+                lat: e.coord._lat || e.coord.y,
+                lng: e.coord._lng || e.coord.x
+            };
+            mouseDownTime = Date.now();
+        }
     });
+
+    naver.maps.Event.addListener(map, 'mouseup', function(e) {
+        if (!mouseDownPos || !e || !e.coord) return;
+
+        const upLat = e.coord._lat || e.coord.y;
+        const upLng = e.coord._lng || e.coord.x;
+        const timeDiff = Date.now() - mouseDownTime;
+
+        // 이동 거리 계산 (약 10m 이내 + 500ms 이내면 클릭으로 판단)
+        const dist = calculateDistance(mouseDownPos.lat, mouseDownPos.lng, upLat, upLng);
+
+        if (dist < 0.01 && timeDiff < 500) {
+            // 클릭으로 판단
+            setReferencePoint(upLat, upLng);
+        }
+
+        mouseDownPos = null;
+    });
+
+    // 더블클릭도 지원 (더 확실한 의도 표현)
+    naver.maps.Event.addListener(map, 'dblclick', function(e) {
+        if (e && e.coord) {
+            const lat = e.coord._lat || e.coord.y;
+            const lng = e.coord._lng || e.coord.x;
+            setReferencePoint(lat, lng);
+        }
+    });
+
+    console.log('[INFO] 지도 이벤트 리스너 등록 완료 (클릭 또는 더블클릭으로 기준점 설정)');
 
     // 지도 이동/줌 완료 시 마커 가시성 및 클러스터링 업데이트
     idleListenerRef = naver.maps.Event.addListener(map, 'idle', updateMarkerVisibility);
