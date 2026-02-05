@@ -1,0 +1,134 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2026-02-06",
+  "settings": {
+    "productCodePattern": "\\[제품코드:\\s*([A-Z0-9]+)\\]",
+    "keywordMatchThreshold": 2,
+    "description": "YouTube 영상과 제품을 자동 매칭하는 데이터 파일입니다."
+  },
+  "products": {
+    "P1001": {
+      "name": "압화 스타터 키트",
+      "price": "35000",
+      "image": "/design/jewoo/products/p1001.jpg",
+      "link": "/shop/shopdetail.html?branduid=1001",
+      "category": "만들기 세트",
+      "description": "압화 초보자를 위한 완벽한 시작 키트"
+    },
+    "P1002": {
+      "name": "투명 식물 표본 - 장미",
+      "price": "42000",
+      "image": "/design/jewoo/products/p1002.jpg",
+      "link": "/shop/shopdetail.html?branduid=1002",
+      "category": "완성품",
+      "description": "우아한 장미 투명 표본"
+    },
+    "P1003": {
+      "name": "압화 재료 세트 (50종)",
+      "price": "28000",
+      "image": "/design/jewoo/products/p1003.jpg",
+      "link": "/shop/shopdetail.html?branduid=1003",
+      "category": "압화 재료",
+      "description": "다양한 압화 재료 50종 모음"
+    },
+    "P1004": {
+      "name": "레터링 압화 액자 DIY",
+      "price": "45000",
+      "image": "/design/jewoo/products/p1004.jpg",
+      "link": "/shop/shopdetail.html?branduid=1004",
+      "category": "만들기 세트",
+      "description": "나만의 레터링 압화 액자 만들기"
+    },
+    "P1005": {
+      "name": "프리저브드 플라워 - 수국",
+      "price": "38000",
+      "image": "/design/jewoo/products/p1005.jpg",
+      "link": "/shop/shopdetail.html?branduid=1005",
+      "category": "신규 압화",
+      "description": "오래 보관 가능한 프리저브드 수국"
+    },
+    "P1006": {
+      "name": "압화 책갈피 만들기 세트",
+      "price": "18000",
+      "image": "/design/jewoo/products/p1006.jpg",
+      "link": "/shop/shopdetail.html?branduid=1006",
+      "category": "만들기 세트",
+      "description": "선물하기 좋은 압화 책갈피"
+    },
+    "P1007": {
+      "name": "압화 휴대폰 케이스 DIY",
+      "price": "32000",
+      "image": "/design/jewoo/products/p1007.jpg",
+      "link": "/shop/shopdetail.html?branduid=1007",
+      "category": "만들기 세트",
+      "description": "나만의 유니크한 휴대폰 케이스"
+    },
+    "P1008": {
+      "name": "압화 캔들 홀더 DIY",
+      "price": "40000",
+      "image": "/design/jewoo/products/p1008.jpg",
+      "link": "/shop/shopdetail.html?branduid=1008",
+      "category": "만들기 세트",
+      "description": "은은한 빛을 담은 압화 캔들"
+    },
+    "P1009": {
+      "name": "계절 압화 세트 - 봄",
+      "price": "35000",
+      "image": "/design/jewoo/products/p1009.jpg",
+      "link": "/shop/shopdetail.html?branduid=1009",
+      "category": "신규 압화",
+      "description": "봄 계절의 아름다운 꽃들"
+    },
+    "P1010": {
+      "name": "압화 공구 세트",
+      "price": "55000",
+      "image": "/design/jewoo/products/p1010.jpg",
+      "link": "/shop/shopdetail.html?branduid=1010",
+      "category": "압화 재료",
+      "description": "전문가용 압화 제작 도구"
+    }
+  },
+  "keywords": {
+    "압화 스타터": ["P1001"],
+    "투명 표본": ["P1002"],
+    "압화 재료": ["P1003", "P1010"],
+    "레터링": ["P1004"],
+    "프리저브드": ["P1005"],
+    "책갈피": ["P1006"],
+    "휴대폰 케이스": ["P1007"],
+    "핸드폰 케이스": ["P1007"],
+    "캔들": ["P1008"],
+    "봄": ["P1009"],
+    "계절": ["P1009"],
+    "공구": ["P1010"],
+    "도구": ["P1010"],
+    "초보자": ["P1001"],
+    "입문": ["P1001"],
+    "시작": ["P1001"]
+  },
+  "categories": {
+    "만들기 세트": ["P1001", "P1004", "P1006", "P1007", "P1008"],
+    "완성품": ["P1002"],
+    "압화 재료": ["P1003", "P1010"],
+    "신규 압화": ["P1005", "P1009"]
+  },
+  "usage": {
+    "설명": "이 파일은 YouTube 영상과 제품을 자동으로 연결하는 데이터 파일입니다.",
+    "매칭 방법": {
+      "1순위": "YouTube 영상 설명에 [제품코드: P1001] 형식으로 제품 코드를 추가하면 자동 매칭됩니다.",
+      "2순위": "영상 제목이나 설명에 키워드가 포함되어 있으면 자동 매칭됩니다.",
+      "3순위": "매칭 실패 시 영상만 표시됩니다 (에러 없음)."
+    },
+    "예시": {
+      "예시 1": "영상 설명에 '[제품코드: P1001]'을 추가하면 '압화 스타터 키트' 제품이 자동으로 연결됩니다.",
+      "예시 2": "영상 제목에 '압화 스타터'가 포함되면 '압화 스타터 키트' 제품이 자동으로 연결됩니다.",
+      "예시 3": "영상 설명에 '초보자'와 '시작'이 포함되면 '압화 스타터 키트' 제품이 자동으로 연결됩니다."
+    },
+    "제품 추가": {
+      "단계 1": "products 섹션에 새 제품 정보 추가",
+      "단계 2": "keywords 섹션에 관련 키워드 추가",
+      "단계 3": "파일 저장 후 FTP로 업로드",
+      "단계 4": "캐시 삭제 후 확인"
+    }
+  }
+}

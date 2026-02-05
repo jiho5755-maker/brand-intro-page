@@ -1,0 +1,72 @@
+<!--
+=============================================
+YouTube + 제품 연동 섹션
+=============================================
+
+이 파일을 메이크샵 index.html에 삽입하세요.
+
+삽입 위치: 메인 배너 끝과 BEST ITEM 시작 사이
+-->
+
+<!-- CSS 파일 로드 -->
+<link rel="stylesheet" href="/design/jewoo/youtube-product-integration/youtube-product.css">
+
+<!-- YouTube + 제품 연동 섹션 -->
+<div class="youtube-product-section">
+  <div class="container">
+    <!-- 섹션 헤더 -->
+    <div class="section-header">
+      <h2 class="h_title">THIS WEEK YOUTUBE</h2>
+      <p class="subtitle">이번 주 압화 작업 과정과 제품을 만나보세요</p>
+    </div>
+
+    <!-- 영상 그리드 (JavaScript로 동적 생성) -->
+    <div id="youtube-product-grid" class="video-grid">
+      <!-- 초기 로딩 메시지 -->
+      <div class="loading-message">
+        <div class="spinner"></div>
+        <p>최신 영상을 불러오는 중...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 카카오 SDK (소셜 공유용) -->
+<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+<script>
+  // 카카오 SDK 초기화
+  // ⚠️ YOUR_KAKAO_APP_KEY를 발급받은 카카오 앱 키로 변경하세요!
+  if (typeof Kakao !== 'undefined') {
+    try {
+      Kakao.init('YOUR_KAKAO_APP_KEY');
+      console.log('[Kakao] SDK 초기화 완료');
+    } catch (error) {
+      console.error('[Kakao] SDK 초기화 실패:', error);
+    }
+  } else {
+    console.error('[Kakao] SDK 로드 실패');
+  }
+</script>
+
+<!-- YouTube-Product JS 로드 -->
+<script src="/design/jewoo/youtube-product-integration/youtube-product.js"></script>
+
+<!--
+=============================================
+메이크샵 index.html 통합 예시
+=============================================
+
+<!-- 기존 메인 배너 끝 -->
+</div>
+
+<!-- ✅ YouTube + 제품 연동 섹션 추가 (이 파일 내용 복사) -->
+<link rel="stylesheet" href="/design/jewoo/youtube-product-integration/youtube-product.css">
+...
+<script src="/design/jewoo/youtube-product-integration/youtube-product.js"></script>
+
+<!-- 기존 BEST ITEM 시작 -->
+<div id="specialWrap">
+...
+
+=============================================
+-->

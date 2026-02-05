@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube-제품 자동 연동 테스트</title>
+
+  <!-- jQuery (메이크샵 기본 제공) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- 스타일시트 -->
+  <link rel="stylesheet" href="youtube-product.css">
+
+  <style>
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .test-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .test-header h1 {
+      margin: 0 0 10px 0;
+      font-size: 24px;
+      color: #333;
+    }
+
+    .test-header p {
+      margin: 0;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .test-controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .test-controls button {
+      padding: 10px 20px;
+      margin: 5px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-cache {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .btn-cache:hover {
+      background: #c0392b;
+    }
+
+    .btn-debug {
+      background: #3498db;
+      color: white;
+    }
+
+    .btn-debug:hover {
+      background: #2980b9;
+    }
+
+    .btn-reload {
+      background: #2ecc71;
+      color: white;
+    }
+
+    .btn-reload:hover {
+      background: #27ae60;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-header">
+    <h1>YouTube-제품 자동 연동 테스트</h1>
+    <p>로컬 테스트 페이지입니다. F12 > Console에서 로그를 확인하세요.</p>
+  </div>
+
+  <div class="test-controls">
+    <button class="btn-debug" onclick="enableYouTubeProductDebug()">디버그 모드 활성화</button>
+    <button class="btn-cache" onclick="clearYouTubeProductCache()">캐시 삭제 & 새로고침</button>
+    <button class="btn-reload" onclick="location.reload()">페이지 새로고침</button>
+  </div>
+
+  <!-- YouTube + 제품 연동 섹션 -->
+  <div class="youtube-product-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="h_title">THIS WEEK YOUTUBE</h2>
+        <p class="subtitle">이번 주 압화 작업 과정과 제품을 만나보세요</p>
+      </div>
+
+      <div id="youtube-product-grid" class="video-grid">
+        <div class="loading-message">
+          <div class="spinner"></div>
+          <p>최신 영상을 불러오는 중...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- YouTube-Product JS -->
+  <script src="youtube-product.js"></script>
+
+  <script>
+    // 페이지 로드 완료 메시지
+    console.log('=== YouTube-제품 자동 연동 테스트 ===');
+    console.log('1. "디버그 모드 활성화" 버튼을 클릭하면 상세 로그를 볼 수 있습니다.');
+    console.log('2. "캐시 삭제 & 새로고침" 버튼을 클릭하면 새로운 데이터를 로드합니다.');
+    console.log('');
+  </script>
+</body>
+</html>

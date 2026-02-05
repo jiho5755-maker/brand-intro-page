@@ -1,0 +1,36 @@
+{
+  "name": "프레스코21 제휴 공방 찾기",
+  "short_name": "프레스코21 공방맵",
+  "description": "전국 프레스코21 제휴 공방을 지도에서 찾아보세요. 압화, 플라워디자인, 투명식물표본 전문 공방",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8F6F1",
+  "theme_color": "#7D9675",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "ko-KR",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/partnermap-v2/images/default-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "lifestyle", "shopping"],
+  "shortcuts": [
+    {
+      "name": "내 위치 주변 공방",
+      "short_name": "주변 공방",
+      "description": "GPS로 가까운 공방 찾기",
+      "url": "/?nearby=true",
+      "icons": [
+        {
+          "src": "/partnermap-v2/images/default-logo.jpg",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}
