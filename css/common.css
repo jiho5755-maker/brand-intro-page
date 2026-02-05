@@ -297,7 +297,7 @@ select:focus {
     /* 자사몰 CSS 변수 통합 완료 */
     --cw-font-sans-serif: 'Pretendard', system-ui, -apple-system, sans-serif;
     --cw-heading-color: #121212;
-    --cw-point-color: #FF4600;
+    --cw-point-color: #2D5F4F;  /* 브랜드 색상 통일: 주황 → 녹색 */
     --cw-color-white: #ffffff;
     --cw-color-10: #f6f6f6;
     --cw-color-30: #dedede;
