@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>파트너 대량 업로드 | 프레스코21 관리자</title>
+
+    <!-- Pretendard 폰트 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+    <!-- Papa Parse for CSV parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <style>
+        :root {
+            --brand-primary: #7D9675;
+            --brand-primary-dark: #5A6F52;
+            --text-primary: #2C2C2C;
+            --text-secondary: #666666;
+            --bg-cream: #F8F6F1;
+            --bg-white: #FFFFFF;
+            --success: #27ae60;
+            --error: #e74c3c;
+            --warning: #f39c12;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background: var(--bg-cream);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: var(--bg-white);
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--brand-primary);
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* API Key Section */
+        .api-key-section {
+            background: var(--bg-white);
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .api-key-section label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .api-key-input {
+            display: flex;
+            gap: 12px;
+        }
+
+        .api-key-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: var(--bg-white);
+            padding: 32px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--brand-primary);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--bg-cream);
+        }
+
+        .upload-zone:hover {
+            border-color: var(--brand-primary-dark);
+            background: #f0ede5;
+        }
+
+        .upload-zone.dragover {
+            border-color: var(--brand-primary-dark);
+            background: rgba(125, 150, 117, 0.1);
+        }
+
+        .upload-zone-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        .upload-zone h3 {
+            font-size: 1.125rem;
+            margin-bottom: 8px;
+        }
+
+        .upload-zone p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .upload-zone input[type="file"] {
+            display: none;
+        }
+
+        /* Template Download */
+        .template-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .template-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: transparent;
+            border: 1px solid var(--brand-primary);
+            color: var(--brand-primary);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .template-btn:hover {
+            background: var(--brand-primary);
+            color: white;
+        }
+
+        /* Preview Table */
+        .preview-section {
+            background: var(--bg-white);
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        .preview-header {
+            padding: 16px 24px;
+            background: var(--bg-cream);
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .preview-header h3 {
+            font-size: 1rem;
+        }
+
+        .preview-count {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .preview-table-wrapper {
+            overflow-x: auto;
+            max-height: 400px;
+        }
+
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.813rem;
+        }
+
+        .preview-table th,
+        .preview-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            white-space: nowrap;
+        }
+
+        .preview-table th {
+            background: #f9f9f9;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        .preview-table tr:hover {
+            background: var(--bg-cream);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-badge.valid {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success);
+        }
+
+        .status-badge.invalid {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--error);
+        }
+
+        .status-badge.duplicate {
+            background: rgba(243, 156, 18, 0.1);
+            color: var(--warning);
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-dark) 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(125, 150, 117, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #ddd;
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-cream);
+        }
+
+        /* Results */
+        .results-section {
+            background: var(--bg-white);
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .results-section h3 {
+            margin-bottom: 16px;
+        }
+
+        .result-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .result-card {
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .result-card.success {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success);
+        }
+
+        .result-card.error {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--error);
+        }
+
+        .result-card.warning {
+            background: rgba(243, 156, 18, 0.1);
+            color: var(--warning);
+        }
+
+        .result-card .count {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .result-card .label {
+            font-size: 0.875rem;
+        }
+
+        /* Error List */
+        .error-list {
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 0.875rem;
+        }
+
+        .error-item {
+            padding: 8px 12px;
+            background: rgba(231, 76, 60, 0.05);
+            border-left: 3px solid var(--error);
+            margin-bottom: 8px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--bg-cream);
+            border-top-color: var(--brand-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>파트너 대량 업로드</h1>
+            <p>CSV 파일로 여러 파트너를 한 번에 등록합니다.</p>
+        </div>
+
+        <!-- API Key -->
+        <div class="api-key-section">
+            <label>관리자 API 키</label>
+            <div class="api-key-input">
+                <input type="password" id="apiKey" placeholder="관리자 API 키를 입력하세요">
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 8px;">
+                * 대량 업로드는 관리자 권한이 필요합니다.
+            </p>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <div class="upload-zone" id="uploadZone">
+                <div class="upload-zone-icon">📁</div>
+                <h3>CSV 파일을 여기에 드래그하거나 클릭하세요</h3>
+                <p>지원 형식: .csv (UTF-8 인코딩 권장)</p>
+                <input type="file" id="fileInput" accept=".csv">
+            </div>
+
+            <div class="template-section">
+                <button class="template-btn" onclick="downloadTemplate()">
+                    📥 CSV 템플릿 다운로드
+                </button>
+                <span style="margin-left: 12px; font-size: 0.813rem; color: var(--text-secondary);">
+                    템플릿을 다운로드하여 양식에 맞게 작성해 주세요.
+                </span>
+            </div>
+        </div>
+
+        <!-- Preview Section (hidden initially) -->
+        <div class="preview-section" id="previewSection" style="display: none;">
+            <div class="preview-header">
+                <h3>미리보기</h3>
+                <span class="preview-count" id="previewCount">0개 항목</span>
+            </div>
+            <div class="preview-table-wrapper">
+                <table class="preview-table" id="previewTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>상태</th>
+                            <th>업체명</th>
+                            <th>주소</th>
+                            <th>연락처</th>
+                            <th>이메일</th>
+                            <th>카테고리</th>
+                            <th>협회</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewBody"></tbody>
+                </table>
+            </div>
+            <div style="padding: 16px 24px;">
+                <div class="actions">
+                    <button class="btn btn-secondary" onclick="clearPreview()">취소</button>
+                    <button class="btn btn-primary" id="uploadBtn" onclick="uploadPartners()">
+                        업로드 실행
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>업로드 중입니다. 잠시만 기다려 주세요...</p>
+        </div>
+
+        <!-- Results Section (hidden initially) -->
+        <div class="results-section" id="resultsSection" style="display: none;">
+            <h3>업로드 결과</h3>
+            <div class="result-summary">
+                <div class="result-card success">
+                    <div class="count" id="successCount">0</div>
+                    <div class="label">성공</div>
+                </div>
+                <div class="result-card error">
+                    <div class="count" id="failedCount">0</div>
+                    <div class="label">실패</div>
+                </div>
+                <div class="result-card warning">
+                    <div class="count" id="duplicateCount">0</div>
+                    <div class="label">중복</div>
+                </div>
+            </div>
+            <div class="error-list" id="errorList"></div>
+        </div>
+    </div>
+
+    <script>
+        // API URL (실제 Apps Script Web App URL로 교체)
+        const API_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
+
+        let parsedData = [];
+
+        // 드래그 앤 드롭
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadZone.addEventListener('click', () => fileInput.click());
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+
+            const file = e.dataTransfer.files[0];
+            if (file && file.name.endsWith('.csv')) {
+                parseCSV(file);
+            } else {
+                alert('CSV 파일만 업로드할 수 있습니다.');
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                parseCSV(file);
+            }
+        });
+
+        // CSV 파싱
+        function parseCSV(file) {
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                encoding: 'UTF-8',
+                complete: function(results) {
+                    parsedData = results.data.map((row, index) => ({
+                        ...row,
+                        _index: index,
+                        _status: validateRow(row)
+                    }));
+                    showPreview(parsedData);
+                },
+                error: function(error) {
+                    alert('CSV 파싱 오류: ' + error.message);
+                }
+            });
+        }
+
+        // 행 검증
+        function validateRow(row) {
+            const errors = [];
+
+            if (!row['업체명'] || row['업체명'].trim() === '') {
+                errors.push('업체명 누락');
+            }
+            if (!row['주소'] || row['주소'].trim() === '') {
+                errors.push('주소 누락');
+            }
+            if (!row['연락처'] || row['연락처'].trim() === '') {
+                errors.push('연락처 누락');
+            }
+
+            if (errors.length > 0) {
+                return { valid: false, errors };
+            }
+
+            return { valid: true };
+        }
+
+        // 미리보기 표시
+        function showPreview(data) {
+            const previewSection = document.getElementById('previewSection');
+            const previewBody = document.getElementById('previewBody');
+            const previewCount = document.getElementById('previewCount');
+
+            previewCount.textContent = `${data.length}개 항목`;
+
+            previewBody.innerHTML = data.map((row, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>
+                        <span class="status-badge ${row._status.valid ? 'valid' : 'invalid'}">
+                            ${row._status.valid ? '유효' : '오류'}
+                        </span>
+                    </td>
+                    <td>${escapeHtml(row['업체명'] || '-')}</td>
+                    <td>${escapeHtml(row['주소'] || '-')}</td>
+                    <td>${escapeHtml(row['연락처'] || '-')}</td>
+                    <td>${escapeHtml(row['이메일'] || '-')}</td>
+                    <td>${escapeHtml(row['카테고리'] || '-')}</td>
+                    <td>${escapeHtml(row['협회'] || '-')}</td>
+                </tr>
+            `).join('');
+
+            previewSection.style.display = 'block';
+        }
+
+        // 미리보기 초기화
+        function clearPreview() {
+            parsedData = [];
+            document.getElementById('previewSection').style.display = 'none';
+            document.getElementById('resultsSection').style.display = 'none';
+            fileInput.value = '';
+        }
+
+        // 업로드 실행
+        async function uploadPartners() {
+            const apiKey = document.getElementById('apiKey').value;
+
+            if (!apiKey) {
+                alert('관리자 API 키를 입력해 주세요.');
+                return;
+            }
+
+            const validData = parsedData.filter(row => row._status.valid);
+
+            if (validData.length === 0) {
+                alert('업로드할 유효한 데이터가 없습니다.');
+                return;
+            }
+
+            // 데이터 변환
+            const partners = validData.map(row => ({
+                name: row['업체명'],
+                address: row['주소'],
+                phone: row['연락처'],
+                email: row['이메일'] || '',
+                category: row['카테고리'] ? row['카테고리'].split(',').map(c => c.trim()) : [],
+                association: row['협회'] || '',
+                partnerType: row['파트너유형'] || '',
+                description: row['소개'] || ''
+            }));
+
+            // UI 업데이트
+            document.getElementById('uploadBtn').disabled = true;
+            document.getElementById('loading').classList.add('show');
+
+            try {
+                const response = await fetch(`${API_URL}?action=bulk&apiKey=${apiKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ partners })
+                });
+
+                const result = await response.json();
+                showResults(result);
+
+            } catch (error) {
+                console.error('Upload error:', error);
+                alert('업로드 중 오류가 발생했습니다.');
+            }
+
+            document.getElementById('uploadBtn').disabled = false;
+            document.getElementById('loading').classList.remove('show');
+        }
+
+        // 결과 표시
+        function showResults(result) {
+            const resultsSection = document.getElementById('resultsSection');
+
+            if (result.success && result.results) {
+                document.getElementById('successCount').textContent = result.results.success.length;
+                document.getElementById('failedCount').textContent = result.results.failed.length;
+                document.getElementById('duplicateCount').textContent = result.results.duplicates.length;
+
+                // 에러 목록
+                const errorList = document.getElementById('errorList');
+                const errors = [
+                    ...result.results.failed.map(f => `행 ${f.row + 1}: ${f.errors ? f.errors.map(e => e.message).join(', ') : f.error}`),
+                    ...result.results.duplicates.map(d => `행 ${d.row + 1}: "${d.name}" 중복`)
+                ];
+
+                errorList.innerHTML = errors.map(e => `
+                    <div class="error-item">${escapeHtml(e)}</div>
+                `).join('');
+            }
+
+            resultsSection.style.display = 'block';
+        }
+
+        // 템플릿 다운로드
+        function downloadTemplate() {
+            const headers = ['업체명', '주소', '연락처', '이메일', '카테고리', '협회', '파트너유형', '소개'];
+            const example = ['꽃공방 압화', '서울시 강남구 테헤란로 123', '02-1234-5678', 'flower@example.com', '압화,플라워디자인', '한국압화협회', '협회', '압화 전문 공방입니다'];
+
+            const csv = [
+                headers.join(','),
+                example.map(v => `"${v}"`).join(',')
+            ].join('\n');
+
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'partner_upload_template.csv';
+            a.click();
+
+            URL.revokeObjectURL(url);
+        }
+
+        // HTML 이스케이프
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
