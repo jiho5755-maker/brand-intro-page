@@ -12,8 +12,11 @@
     <!-- Pretendard 폰트 (메이크샵 CDN) -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 
-    <!-- 파트너맵 전용 CSS (v8 - 기준점 클릭 개선) -->
-    <link rel="stylesheet" href="./css/style.css?v=8">
+    <!-- 파트너맵 전용 CSS (v9 - 검색/필터 고도화) -->
+    <link rel="stylesheet" href="./css/style.css?v=9">
+
+    <!-- Fuse.js for fuzzy search -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
 
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#7D9675">
@@ -106,10 +109,14 @@
 
                     <div class="row">
                         <div class="col-12 col-md-6 mb-3">
-                            <input type="text"
-                                   id="partnerSearch"
-                                   placeholder="업체명, 주소로 검색..."
-                                   class="search-input">
+                            <div class="autocomplete-container">
+                                <input type="text"
+                                       id="partnerSearch"
+                                       placeholder="업체명, 주소로 검색..."
+                                       class="search-input"
+                                       autocomplete="off">
+                                <ul id="autocompleteList" class="autocomplete-list"></ul>
+                            </div>
                         </div>
                         <div class="col-12 col-md-3 mb-3">
                             <button class="location-btn" id="myLocationBtn">
@@ -122,6 +129,9 @@
                             </button>
                         </div>
                     </div>
+
+                    <!-- 활성 필터 배지 -->
+                    <div id="activeFilters" class="active-filters" style="display: none;"></div>
 
                     <!-- 안내 메시지 -->
                     <div class="map-hint">
@@ -187,8 +197,8 @@
     <!-- Toast Container -->
     <div id="toastContainer"></div>
 
-    <!-- 파트너맵 전용 JavaScript (v8 - 기준점 클릭 개선) -->
-    <script src="./js/main.js?v=8"></script>
+    <!-- 파트너맵 전용 JavaScript (v9 - 검색/필터 고도화) -->
+    <script src="./js/main.js?v=9"></script>
 
     <!-- Service Worker 등록 -->
     <script>

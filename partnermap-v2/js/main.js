@@ -31,6 +31,219 @@ let currentFilters = {
 };
 let favorites = [];
 let showFavoritesOnly = false;
+let fuse = null; // Fuse.js 인스턴스
+
+// 카테고리 색상 매핑
+const CATEGORY_COLORS = {
+    '압화': '#FFB8A8',
+    '플라워디자인': '#E8D5E8',
+    '투명식물표본': '#A8E0C8',
+    '캔들': '#F5E6CA',
+    '석고': '#F5E6CA',
+    '리본': '#D4E4F7',
+    '디퓨저': '#F0E4D4',
+    'default': '#7D9675'
+};
+
+// 카테고리 색상 가져오기
+function getCategoryColor(category) {
+    return CATEGORY_COLORS[category] || CATEGORY_COLORS['default'];
+}
+
+// Fuse.js 초기화
+function initFuseSearch() {
+    if (typeof Fuse === 'undefined') {
+        console.warn('Fuse.js not loaded, falling back to basic search');
+        return;
+    }
+
+    const options = {
+        keys: [
+            { name: 'name', weight: 0.4 },
+            { name: 'address', weight: 0.3 },
+            { name: 'category', weight: 0.2 },
+            { name: 'description', weight: 0.1 }
+        ],
+        threshold: 0.3,
+        includeScore: true,
+        minMatchCharLength: 2
+    };
+
+    fuse = new Fuse(partners, options);
+    console.log('[INFO] Fuse.js 검색 초기화 완료');
+}
+
+// 자동완성 표시
+function showAutocomplete(query) {
+    const list = document.getElementById('autocompleteList');
+    if (!list || !query || query.length < 2) {
+        if (list) list.style.display = 'none';
+        return;
+    }
+
+    let results = [];
+
+    if (fuse) {
+        // Fuse.js 퍼지 검색
+        results = fuse.search(query).slice(0, 5).map(r => r.item);
+    } else {
+        // 기본 검색 fallback
+        const q = query.toLowerCase();
+        results = partners.filter(p =>
+            p.name.toLowerCase().includes(q) ||
+            p.address.toLowerCase().includes(q)
+        ).slice(0, 5);
+    }
+
+    if (results.length === 0) {
+        list.style.display = 'none';
+        return;
+    }
+
+    list.innerHTML = results.map(p => `
+        <li class="autocomplete-item" data-id="${p.id}">
+            <span class="autocomplete-name">${escapeHtml(p.name)}</span>
+            <span class="autocomplete-address">${escapeHtml(p.address.substring(0, 30))}...</span>
+        </li>
+    `).join('');
+
+    // 클릭 이벤트
+    list.querySelectorAll('.autocomplete-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const partner = partners.find(p => p.id == item.dataset.id);
+            if (partner) {
+                document.getElementById('partnerSearch').value = partner.name;
+                list.style.display = 'none';
+                showPartnerDetail(partner);
+                map.panTo(new naver.maps.LatLng(partner.lat, partner.lng));
+                map.setZoom(15);
+            }
+        });
+    });
+
+    list.style.display = 'block';
+}
+
+// 활성 필터 배지 업데이트
+function updateActiveFilterBadges() {
+    const container = document.getElementById('activeFilters');
+    if (!container) return;
+
+    const badges = [];
+
+    if (currentFilters.category !== 'all') {
+        badges.push({
+            type: 'category',
+            value: currentFilters.category,
+            label: currentFilters.category,
+            color: getCategoryColor(currentFilters.category)
+        });
+    }
+    if (currentFilters.region !== 'all') {
+        badges.push({
+            type: 'region',
+            value: currentFilters.region,
+            label: currentFilters.region
+        });
+    }
+    if (currentFilters.association !== 'all') {
+        badges.push({
+            type: 'association',
+            value: currentFilters.association,
+            label: currentFilters.association
+        });
+    }
+    if (currentFilters.partnerType !== 'all') {
+        badges.push({
+            type: 'partnerType',
+            value: currentFilters.partnerType,
+            label: currentFilters.partnerType
+        });
+    }
+    if (showFavoritesOnly) {
+        badges.push({
+            type: 'favorites',
+            value: true,
+            label: '즐겨찾기'
+        });
+    }
+
+    if (badges.length === 0) {
+        container.style.display = 'none';
+        return;
+    }
+
+    container.innerHTML = badges.map(b => `
+        <span class="filter-badge" style="${b.color ? `background-color: ${b.color}20; border-color: ${b.color};` : ''}">
+            ${escapeHtml(b.label)}
+            <button class="badge-remove" onclick="removeFilter('${b.type}', '${b.value}')" aria-label="${b.label} 필터 제거">×</button>
+        </span>
+    `).join('') + `
+        <button class="clear-all-btn" onclick="clearAllFilters()">모두 초기화</button>
+    `;
+
+    container.style.display = 'flex';
+}
+
+// 필터 제거
+function removeFilter(type, value) {
+    if (type === 'favorites') {
+        showFavoritesOnly = false;
+        document.getElementById('favoritesFilterBtn')?.classList.remove('active');
+    } else {
+        currentFilters[type] = 'all';
+        // 해당 필터 버튼 상태 초기화
+        const containerId = type + 'Filters';
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset[type] === 'all') {
+                    btn.classList.add('active');
+                }
+            });
+        }
+    }
+    applyFilters();
+    updateUrlParams();
+}
+
+// 모든 필터 초기화
+function clearAllFilters() {
+    currentFilters = {
+        category: 'all',
+        region: 'all',
+        association: 'all',
+        partnerType: 'all',
+        search: ''
+    };
+    showFavoritesOnly = false;
+
+    // 모든 필터 버튼 초기화
+    ['categoryFilters', 'regionFilters', 'associationFilters', 'partnerTypeFilters'].forEach(containerId => {
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                const dataAttr = Object.keys(btn.dataset)[0];
+                if (btn.dataset[dataAttr] === 'all') {
+                    btn.classList.add('active');
+                }
+            });
+        }
+    });
+
+    // 즐겨찾기 버튼 초기화
+    document.getElementById('favoritesFilterBtn')?.classList.remove('active');
+
+    // 검색창 초기화
+    const searchInput = document.getElementById('partnerSearch');
+    if (searchInput) searchInput.value = '';
+
+    applyFilters();
+    updateUrlParams();
+    showToast('모든 필터가 초기화되었습니다.', 'info');
+}
 
 // 즐겨찾기 관리
 function loadFavorites() {
@@ -127,6 +340,9 @@ async function initPartnerMap() {
         partners = await loadPartnerData();
         filteredPartners = partners;
 
+        // 2.5. Fuse.js 검색 초기화
+        initFuseSearch();
+
         // 3. 지도 초기화
         initMap();
 
@@ -172,36 +388,29 @@ function initMap() {
 
     map = new naver.maps.Map('naverMap', mapOptions);
 
-    // 지도 클릭 감지 (mousedown + mouseup 조합으로 드래그와 구분)
-    let mouseDownPos = null;
-    let mouseDownTime = 0;
+    // 지도 클릭 감지 (dragstart/dragend 플래그로 정확한 드래그 감지)
+    let isDragging = false;
 
-    naver.maps.Event.addListener(map, 'mousedown', function(e) {
-        if (e && e.coord) {
-            mouseDownPos = {
-                lat: e.coord._lat || e.coord.y,
-                lng: e.coord._lng || e.coord.x
-            };
-            mouseDownTime = Date.now();
-        }
+    // 드래그 상태 추적 (네이버 지도 API 내장 이벤트 활용)
+    naver.maps.Event.addListener(map, 'dragstart', function() {
+        isDragging = true;
     });
 
-    naver.maps.Event.addListener(map, 'mouseup', function(e) {
-        if (!mouseDownPos || !e || !e.coord) return;
+    naver.maps.Event.addListener(map, 'dragend', function() {
+        // 드래그 종료 후 약간의 딜레이 (클릭 이벤트와 겹치지 않도록)
+        setTimeout(() => { isDragging = false; }, 100);
+    });
 
-        const upLat = e.coord._lat || e.coord.y;
-        const upLng = e.coord._lng || e.coord.x;
-        const timeDiff = Date.now() - mouseDownTime;
-
-        // 이동 거리 계산 (약 10m 이내 + 500ms 이내면 클릭으로 판단)
-        const dist = calculateDistance(mouseDownPos.lat, mouseDownPos.lng, upLat, upLng);
-
-        if (dist < 0.01 && timeDiff < 500) {
-            // 클릭으로 판단
-            setReferencePoint(upLat, upLng);
+    // 클릭 처리 (드래그 중이 아닐 때만)
+    naver.maps.Event.addListener(map, 'click', function(e) {
+        if (isDragging) return;
+        if (e && e.coord) {
+            const lat = e.coord._lat || e.coord.y;
+            const lng = e.coord._lng || e.coord.x;
+            if (lat && lng) {
+                setReferencePoint(lat, lng);
+            }
         }
-
-        mouseDownPos = null;
     });
 
     // 더블클릭도 지원 (더 확실한 의도 표현)
@@ -209,7 +418,9 @@ function initMap() {
         if (e && e.coord) {
             const lat = e.coord._lat || e.coord.y;
             const lng = e.coord._lng || e.coord.x;
-            setReferencePoint(lat, lng);
+            if (lat && lng) {
+                setReferencePoint(lat, lng);
+            }
         }
     });
 
@@ -480,15 +691,20 @@ function createMarkers() {
 }
 
 function createMarkerIcon(partner) {
-    // 파트너 유형별 색상
+    // 색상 결정: 파트너 유형 > 카테고리 > 기본
     let color = '#7D9675'; // 기본 (브랜드 컬러)
 
+    // 1. 파트너 유형별 색상 (우선순위 높음)
     if (partner.partnerType) {
         if (partner.partnerType.includes('협회') || partner.partnerType === '협회') {
             color = '#5A7FA8';
         } else if (partner.partnerType.includes('인플루언서') || partner.partnerType === '인플루언서') {
             color = '#C9A961';
         }
+    }
+    // 2. 카테고리별 색상 (파트너 유형이 기본일 때)
+    else if (partner.category && partner.category.length > 0) {
+        color = getCategoryColor(partner.category[0]);
     }
 
     // SVG 꽃 아이콘
@@ -752,6 +968,7 @@ function applyFilters() {
     createMarkers();
     renderPartnerList();
     updateFavoriteButtons();
+    updateActiveFilterBadges();
 }
 
 function extractRegion(address) {
@@ -1117,18 +1334,45 @@ function setupEventListeners() {
 
     // 검색
     const searchInput = document.getElementById('partnerSearch');
+    const autocompleteList = document.getElementById('autocompleteList');
+
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             currentFilters.search = searchInput.value;
+            if (autocompleteList) autocompleteList.style.display = 'none';
             applyFilters();
         }
     });
 
-    // 검색 debounce 적용
+    // 자동완성 표시 (debounce 적용)
     searchInput.addEventListener('input', debounce(function() {
-        currentFilters.search = this.value;
-        applyFilters();
-    }, 300));
+        const query = this.value.trim();
+        showAutocomplete(query);
+
+        // 3글자 이상일 때만 필터 적용
+        if (query.length >= 2) {
+            currentFilters.search = query;
+            applyFilters();
+        } else if (query.length === 0) {
+            currentFilters.search = '';
+            applyFilters();
+        }
+    }, 200));
+
+    // 포커스 아웃 시 자동완성 숨김
+    searchInput.addEventListener('blur', () => {
+        setTimeout(() => {
+            if (autocompleteList) autocompleteList.style.display = 'none';
+        }, 200);
+    });
+
+    // 포커스 시 자동완성 다시 표시
+    searchInput.addEventListener('focus', () => {
+        const query = searchInput.value.trim();
+        if (query.length >= 2) {
+            showAutocomplete(query);
+        }
+    });
 
     // 내 위치
     document.getElementById('myLocationBtn').addEventListener('click', searchNearby);
