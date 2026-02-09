@@ -181,7 +181,7 @@ html {
     position: relative;
     overflow: hidden;
     background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)),
-                url('../images/sections/workshop.jpg') no-repeat center center / cover;
+                url('../images/sections/workshop.png') no-repeat center center / cover;
     background-attachment: fixed;
     display: flex;
     align-items: center;
